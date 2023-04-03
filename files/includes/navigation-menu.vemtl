@@ -1,0 +1,82 @@
+<div class="menu">
+    <div class="main-menu">
+        <div class="scroll">
+            <ul class="list-unstyled">
+                <li>
+                    <a href="#dashboard">
+                        <i class="iconsminds-shop-4"></i> {{ __('Dashboards') }}
+                    </a>
+                </li>
+                <li>
+                    <a href="#pages">
+                        <i class="iconsminds-digital-drawing"></i> {{ __('Pages') }}
+                    </a>
+                </li>
+                <% if(this.generatorSettings.modules.permissions) { %>
+                <li>
+                    <a href="#permission">
+                        <i class="glyph-icon iconsminds-firewall"></i> {{ __('Permission') }}
+                    </a>
+                </li>
+                <% } %>
+                <li>
+                    <a href="https://dore-jquery-docs.coloredstrategies.com" target="_blank">
+                        <i class="iconsminds-library"></i> {{ __('Docs') }}
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="sub-menu">
+        <div class="scroll">
+            <ul class="list-unstyled" data-link="dashboard">
+                <li>
+                    <x-nav-link href="{{ route('dashboard') }}"
+                    :active="request()->routeIs('dashboard')"
+                    >
+                        <i class="simple-icon-rocket"></i> <span class="d-inline-block">{{ __('dashboard') }}</span>
+                    </x-nav-link>
+                </li>
+            </ul>
+            <ul class="list-unstyled" data-link="pages" id="pages">
+                <% for(let crud of this.project.getMainCruds()) { %>
+                    @can('view-any', <$ this.projectHelper.getModelsNamespace() $>\<$ crud.model.name $>::class)
+                    <li class="{{ (request()->routeIs('<$ crud.model.plural.case('paramCase') $>.*')) ? 'active' : '' }}">
+                        <x-nav-link href="{{ route('<$ crud.model.plural.case('paramCase') $>.index') }}" 
+                            :active="request()->routeIs('<$ crud.model.plural.case('paramCase') $>.index')"
+                        >
+                            <i class="simple-icon-rocket"></i>
+                            <span class="d-inline-block">{{ __('<$ crud.name.case('snakeCase') $>') }}</span>
+                        </x-nav-link>
+                    </li>
+                    @endcan
+                <% } %>
+            </ul>
+            <% if(this.generatorSettings.modules.permissions) { %>
+            <ul class="list-unstyled" data-link="permission" id="permission">
+                @can('view-any', Spatie\Permission\Models\Role::class)
+                <li class="nav-item">
+                    <x-nav-link href="{{ route('roles.index') }}"
+                    :active="request()->routeIs('roles.index')"
+                    >
+                        <i class="glyph-icon iconsminds-security-check"></i>
+                        <span class="d-inline-block">{{ __('Roles') }}</span>
+                    </x-nav-link>
+                </li>
+                @endcan
+                @can('view-any', Spatie\Permission\Models\Permission::class)
+                <li class="nav-item">
+                    <x-nav-link href="{{ route('permissions.index') }}"
+                    :active="request()->routeIs('permissions.index')"
+                    >
+                        <i class="glyph-icon iconsminds-lock-2"></i>
+                        <span class="d-inline-block">{{ __('Permissions') }}</span>
+                    </x-nav-link>
+                </li>
+                @endcan
+            </ul>
+            <% } %>
+        </div>
+    </div>
+</div>

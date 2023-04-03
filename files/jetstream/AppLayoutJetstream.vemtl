@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <import template="AppLayoutJetstream_MainHeaderContent">
+
+        <import template="AppLayoutJetstream_ExtraHeaderContent">
+    </head>
+    <body id="app-container" class="menu-default show-spinner">
+    
+        <import template="AppLayoutJetstream_MainDiv">
+
+        <import template="AppLayoutJetstream_ExtraBodyContent">
+
+        <import template="AlpineImageViewerComponent">
+    </body>
+</html>

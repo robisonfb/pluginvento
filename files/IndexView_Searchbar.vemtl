@@ -1,0 +1,59 @@
+<div class="row">
+    <div class="col-12">
+        <h1>{{ __('<$ modelPluralCamelCase $>') }}</h1>
+        <div class="top-right-button-container">
+            <div class="btn-group">
+                <button class="btn btn-outline-primary btn-lg dropdown-toggle" type="button"
+                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ __ ('export') }}
+                </button>
+                <div class="dropdown-menu">
+                    <a class="dropdown-item" id="dataTablesCopy" href="#">{{ __('copy') }}</a>
+                    <a class="dropdown-item" id="dataTablesExcel" href="#">{{ __('excel') }}</a>
+                    <a class="dropdown-item" id="dataTablesCsv" href="#">{{ __('csv') }}</a>
+                    <a class="dropdown-item" id="dataTablesPdf" href="#">{{ __('pdf') }}</a>
+                </div>
+            </div>
+            
+            @can('create', <$ this.projectHelper.getModelsNamespace() $>\<$ this.model.name $>::class)
+            <a href="{{ route('<$ modelPluralParamCase $>.create') }}" class="btn btn-outline-primary btn-lg top-right-button  mr-1">
+                {{ __('add_new') }}
+            </a>
+            @endcan
+        </div>
+        
+        @include('layouts.breadcrumbs', ['breadcrumbs' => [
+            '<$ crudNameSnakeCase $>' => route('<$ modelPluralParamCase $>.index'),
+            __('list_<$ crudNameSnakeCase $>'),
+        ]])
+
+        <div class="mb-2">
+            <a class="btn pt-0 pl-0 d-inline-block d-md-none" data-toggle="collapse"
+                href="#displayOptions" role="button" aria-expanded="true"
+                aria-controls="displayOptions">
+                {{ __('display_options') }}
+                <i class="simple-icon-arrow-down align-middle"></i>
+            </a>
+            <div class="collapse dont-collapse-sm" id="displayOptions">
+                <div class="d-block d-md-inline-block">
+                    <div class="search-sm d-inline-block float-md-left mr-1 mb-1 align-top">
+                        <input class="form-control" placeholder="{{ __('search') }}" id="searchDatatable">
+                    </div>
+                </div>
+                <div class="float-md-right dropdown-as-select" id="pageCountDatatable">
+                    <span class="text-muted text-small">Displaying 1-10 of 40 items </span>
+                    <button class="btn btn-outline-dark btn-xs dropdown-toggle" type="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        10
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right">
+                        <a class="dropdown-item" href="#">5</a>
+                        <a class="dropdown-item active" href="#">10</a>
+                        <a class="dropdown-item" href="#">20</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="separator"></div>
+    </div>
+</div>

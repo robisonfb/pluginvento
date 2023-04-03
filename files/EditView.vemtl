@@ -1,0 +1,48 @@
+<# TEMPLATE VARIABLES #>
+<% let modelPluralSnakeCase = this.model.plural.case('snakeCase') %>
+<% let modelPluralParamCase = this.model.plural.case('paramCase') %>
+<% let modelNameCamelCase = this.model.name.case('camelCase') %>
+<% let crudNameSnakeCase = this.crud.name.case('snakeCase') %>
+<####>
+<x-app-layout>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">    
+                <h1>{{ __('<$ crudNameSnakeCase $>') }}</h1>
+                @include('layouts.breadcrumbs', ['breadcrumbs' => [
+                    '<$ crudNameSnakeCase $>' => route('<$ modelPluralParamCase $>.index'),
+                    __('Create <$ modelPluralParamCase $>'),
+                ]])
+                <div class="separator mb-5"></div>  
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <x-partials.card>
+                    <x-form method="PUT" action="{{ route('<$ modelPluralParamCase $>.update', $<$ modelNameCamelCase $>) }}" <$ this.crud.hasFileOrImageInputs() ? 'has-files' : '' $>>
+                        @include('<$ this.project.viewsPath() $>.<$ modelPluralSnakeCase $>.form-inputs')
+
+                        <div class="mt-5">
+                            <div class="btn-group" role="group" aria-label="action">
+                                <a href="{{ route('<$ modelPluralParamCase $>.index') }}">
+                                    <button type="button" class="btn  btn-primary">
+                                        <i class="mr-1 glyph-icon iconsminds-left-1"></i> {{ __('back') }}
+                                    </button>
+                                </a>
+                                <a href="{{ route('<$ modelPluralParamCase $>.create') }}">
+                                    <button type="button" class="btn  btn-primary">
+                                        <i class="mr-1 glyph-icon iconsminds-add"></i> {{ __('create') }}
+                                    </button>
+                                </a>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary float-right">
+                                <i class="mr-1 glyph-icon iconsminds-disk"></i> {{ __('update') }}
+                            </button>
+                        </div>
+                    </x-form>
+                </x-partials.card>
+            </div>
+        </div>
+    </div>
+</x-app-layout>

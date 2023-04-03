@@ -1,0 +1,4 @@
+<x-inputs.hidden 
+    name="<$ this.name $>" 
+    :value="old('<$ this.name $>', '<$ this.defaultValue $>')"
+></x-inputs.hidden>

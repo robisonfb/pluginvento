@@ -1,0 +1,83 @@
+<# CSS VARIABLES #>
+<% let cssClass = this.project.css().getReponsiveClassesForInput(this) %>
+
+<% if(cssClass == "w-full lg:w-1/12") { %>
+    <% cssClass = "col-md-1" %>
+<% } else if(cssClass == "w-full lg:w-2/12") { %>
+    <% cssClass = "col-md-2" %>
+<% } else if(cssClass == "w-full lg:w-3/12") { %>
+    <% cssClass = "col-md-3" %>
+<% } else if(cssClass == "w-full lg:w-4/12") { %>
+    <% cssClass = "col-md-4" %>
+<% } else if(cssClass == "w-full lg:w-5/12") { %>
+    <% cssClass = "col-md-5" %>
+<% } else if(cssClass == "w-full lg:w-6/12") { %>
+    <% cssClass = "col-md-6" %>
+<% } else if(cssClass == "w-full lg:w-7/12") { %>
+    <% cssClass = "col-md-7" %>
+<% } else if(cssClass == "w-full lg:w-8/12") { %>
+    <% cssClass = "col-md-8" %>
+<% } else if(cssClass == "w-full lg:w-9/12") { %>
+    <% cssClass = "col-md-9" %>
+<% } else if(cssClass == "w-full lg:w-10/12") { %>
+    <% cssClass = "col-md-10" %>
+<% } else if(cssClass == "w-full lg:w-11/12") { %>
+    <% cssClass = "col-md-11" %>
+<% } else if(cssClass == "w-full") { %>
+    <% cssClass = "col-md-12" %>
+<% } %>
+<####>
+<x-inputs.group class="<$ cssClass $>">
+    <% if(this.crud.isForLivewire) { %>
+        <###>
+        <% if(this.crud.isManyToManyDetail) { %>
+        <div image-url="{{ $<$ this.getLivewireSingleName() $> ? \Storage::url($<$ this.getLivewireSingleName() $>) : '' }}"
+            x-data="imageViewer()"
+            @refresh.window="refreshUrl()"
+        >
+        <% } else { %>
+        <div image-url="{{ $editing && $<$ this.crud.model.name.case('camelCase') $>-><$ this.name $> ? \Storage::url($<$ this.crud.model.name.case('camelCase') $>-><$ this.name $>) : '' }}"
+            x-data="imageViewer()"
+            @refresh.window="refreshUrl()"
+        >
+        <% } %>
+    <% } else { %>
+    <div 
+        x-data="imageViewer('{{ $editing && $<$ this.crud.model.name.case('camelCase') $>-><$ this.name $> ? \Storage::url($<$ this.crud.model.name.case('camelCase') $>-><$ this.name $>) : '' }}')"
+    >
+    <% } %>
+        <x-inputs.partials.label name="<$ this.crud.isForLivewire ? this.getLivewireSingleName() : this.name $>" label="<$ this.label $>"></x-inputs.partials.label><br>
+        <!-- Show the image -->
+        <template x-if="imageUrl">
+            <img :src="imageUrl" 
+                class="object-cover rounded border border-gray-200" 
+                style="width: 100px; height: 100px;"
+            >
+        </template>
+        
+        <!-- Show the gray box when image is not available -->
+        <template x-if="!imageUrl">
+            <div 
+                class="border rounded border-gray-200 bg-gray-100" 
+                style="width: 100px; height: 100px;"
+            ></div>
+        </template>
+        
+        <div class="mt-2">
+            <input type="file" 
+                <% if(this.crud.isForLivewire) { %>
+                name="<$ this.getLivewireSingleName() $>" 
+                id="<$ this.getLivewireSingleName() $>{{ $uploadIteration }}" 
+                wire:model="<$ this.getLivewireSingleName() $>"
+                <% } else { %>
+                name="<$ this.name $>"
+                id="<$ this.name $>"
+                <% } %>
+                @change="fileChosen"
+            >
+        </div>
+        @error('<$ this.crud.isForLivewire ? this.getLivewireSingleName() : this.name $>')
+            @include('components.inputs.partials.error')
+        @enderror
+    </div>
+</x-inputs.group>

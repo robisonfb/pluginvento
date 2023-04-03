@@ -1,0 +1,89 @@
+<% let cols = 1 %>
+<div class="row">
+    <div class="col-12 mb-4 data-table-rows data-tables-hide-filter">
+        <table id="<$ crudNameSnakeCase $>-table" class="data-table responsive nowrap data-table-standard">
+            
+            <thead>
+                <tr>
+                    <% for(let input of this.crud.inputs) { %>
+                    <% if(input.isAllowedOnIndexPages() && input.onIndex) { %>
+                    <% cols++ %>
+                    <th>{{ __('<$ input.name $>') }}</th>
+                    <% } %>
+                    <% } %>
+                    <th class="empty text-center">{{ __('action')}}</th>
+                </tr>
+            </thead>
+            <tbody>
+                 @forelse($<$ modelPluralCamelCase $> as $<$ modelNameCamelCase $>)
+                <tr>
+                    <% for(let input of this.crud.inputs) { %>
+                    <# COMPUTED INPUT #>
+                    <% if(input.isComputed && input.onIndex) { %>
+                    <% if(input.isNumeric()) { %>
+                    <td><p class="list-item-heading text-right">{{ <$ input.computedFormula $> }}</p></td>
+                    <% } else { %>
+                    <td><p class="list-item-heading text-left">{{ <$ input.computedFormula $> }}</p></td>
+                    <% } %>
+                    <% } %>
+                    <# INPUT LINKED TO FIELD #>
+                    <% if(input.isLinkedToField() && input.onIndex) { %>
+                    <% if(input.isImage()) { %>
+                    <td><p class="list-item-heading text-left"><x-partials.thumbnail src="{{ $<$ modelNameCamelCase $>-><$ input.name $> ? \Storage::url($<$ modelNameCamelCase $>-><$ input.name $>) : '' }}"/></p></td>
+                    <% } else if(input.isFile()) { %>
+                    <td><p class="list-item-heading text-left">@if($<$ modelNameCamelCase $>-><$ input.name $>) <a href="{{ \Storage::url($<$ modelNameCamelCase $>-><$ input.name $>) }}" class="btn btn-secondary btn-xs mb-1" target="blank"><i class="glyph-icon iconsminds-download-1"></i> {{ __('download') }}</a> @else - @endif</p></td>
+                    <% } else { %>
+                    <% if(input.isForRelationship()) { %>
+                    <td><p class="list-item-heading text-left">{{ optional($<$ modelNameCamelCase $>-><$ input.relationship.name $>)-><$ input.relationship.model.getLabelFieldName() $> ?? '-' }}</p></td>
+                    <% } else if(input.isNumeric()) { %>
+                    <td><p class="list-item-heading text-right">{{ $<$ modelNameCamelCase $>-><$ input.name $> ?? '-' }}</p></td>
+                    <% } else if(input.isJson()) { %>
+                    <td><p class="list-item-heading text-right"><pre>{{ json_encode($<$ modelNameCamelCase $>-><$ input.name $>) ?? '-' }}</pre></p></td>
+                    <% } else if(input.isUrl()) { %>
+                    <td><p class="list-item-heading text-left"><a class="underline cursor-pointer" target="_blank" href="{{ $<$ modelNameCamelCase $>-><$ input.name $> }}">{{ $<$ modelNameCamelCase $>-><$ input.name $> ?? '-' }}</a></p></td>
+                    <% } else { %>
+                    <td><p class="list-item-heading text-left">{{ $<$ modelNameCamelCase $>-><$ input.name $> ?? '-' }}</p></td>
+                    <% } %>
+                    <% } %>
+                    <% } %>
+                    <% } %>
+                    <td class="text-center" style="width: 90px;">
+                        <div class="btn-group btn-group-lg actions" role="group" aria-label="actions">
+                            @can('update', $<$ modelNameCamelCase $>)
+                            <a href="{{ route('<$ modelPluralParamCase $>.edit', $<$ modelNameCamelCase $>) }}" class="mr-1">
+                                <button type="button" class="btn pr-0">
+                                    <i class="glyph-icon simple-icon-note"></i>
+                                </button>
+                            </a>
+                            @endcan
+
+                            @can('delete', $<$ modelNameCamelCase $>)
+                            <form action="{{ route('<$ modelPluralParamCase $>.destroy', $<$ modelNameCamelCase $>) }}" method="POST" onsubmit="return confirm('{{ __('are_you_sure') }}')">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn">
+                                    <i class="glyph-icon simple-icon-trash"></i>
+                                </button>
+                            </form>
+                            @endcan
+                        </div>
+                    </td>
+                </tr>
+                @empty
+                <tr>
+                    <td colspan="<$ cols $>">{{ __('no_items_found') }}</td>
+                </tr>
+                @endforelse
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td colspan="<$ cols $>">
+                        <div class="mt-10">
+                            {!! $<$ modelPluralCamelCase $>->render() !!}
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+</div>

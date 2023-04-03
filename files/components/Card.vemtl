@@ -1,0 +1,16 @@
+@props([
+'bodyClasses' => 'card-body',
+])
+
+<div {{ $attributes->merge(['class' => 'card mb-4']) }}>
+    <div class="{{ $bodyClasses }}">
+
+        @if(isset($title))
+        <h5 class="mb-4">
+            {{ $title }}
+        </h5>
+        @endif
+
+        {{ $slot }}
+    </div>
+</div>

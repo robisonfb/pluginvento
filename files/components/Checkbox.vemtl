@@ -1,0 +1,41 @@
+@props([
+    'id',
+    'name',
+    'label',
+    'value',
+    'checked' => false,
+    'addHiddenValue' => true,
+    'hiddenValue' => 0,
+])
+
+@php
+    $checked = !! $checked
+@endphp
+
+
+
+    {{-- Adds a hidden default value to be send if checked is false --}}
+    @if($label ?? null)
+        <label class="text-gray-700 pl-2" for="{{ $id ?? $name }}">
+            {{ $label }}
+        </label>
+    @endif
+    <div class="custom-switch custom-switch-primary mb-2">
+        @if($addHiddenValue)
+        <input type="hidden" id="{{  $id ?? $name }}-hidden" name="{{ $name }}" value="{{ $hiddenValue }}">
+        @endif
+        <input
+            type="checkbox"
+            id="{{ $id ?? $name }}"
+            name="{{ $name }}"
+            value="{{ $value ?? 1 }}"
+            {{ $checked ? 'checked' : '' }}
+            {{ $attributes->merge(['class' => 'custom-switch-input']) }}
+        >
+        <label class="custom-switch-btn" for="{{ $id ?? $name }}"></label>
+    </div>
+
+@error($name)
+    @include('components.inputs.partials.error')
+@enderror
+

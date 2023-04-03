@@ -1,0 +1,63 @@
+<# CSS VARIABLES #>
+<% let cssClass = this.project.css().getReponsiveClassesForInput(this) %>
+
+<% if(cssClass == "w-full lg:w-1/12") { %>
+    <% cssClass = "col-md-1" %>
+<% } else if(cssClass == "w-full lg:w-2/12") { %>
+    <% cssClass = "col-md-2" %>
+<% } else if(cssClass == "w-full lg:w-3/12") { %>
+    <% cssClass = "col-md-3" %>
+<% } else if(cssClass == "w-full lg:w-4/12") { %>
+    <% cssClass = "col-md-4" %>
+<% } else if(cssClass == "w-full lg:w-5/12") { %>
+    <% cssClass = "col-md-5" %>
+<% } else if(cssClass == "w-full lg:w-6/12") { %>
+    <% cssClass = "col-md-6" %>
+<% } else if(cssClass == "w-full lg:w-7/12") { %>
+    <% cssClass = "col-md-7" %>
+<% } else if(cssClass == "w-full lg:w-8/12") { %>
+    <% cssClass = "col-md-8" %>
+<% } else if(cssClass == "w-full lg:w-9/12") { %>
+    <% cssClass = "col-md-9" %>
+<% } else if(cssClass == "w-full lg:w-10/12") { %>
+    <% cssClass = "col-md-10" %>
+<% } else if(cssClass == "w-full lg:w-11/12") { %>
+    <% cssClass = "col-md-11" %>
+<% } else if(cssClass == "w-full") { %>
+    <% cssClass = "col-md-12" %>
+<% } %>
+<####>
+
+<x-inputs.group class="<$ cssClass $>">
+    <% if(this.isLinkedToField()) { %>
+    <x-inputs.date 
+        <% if(this.crud.isForLivewire) { %>
+        name="<$ this.getLivewireSingleName() $>" 
+        <% } else { %>
+        name="<$ this.name $>" 
+        <% } %>
+        label="<$ this.label $>"
+        <% if(this.crud.isForLivewire) { %>
+        wire:model="<$ this.getLivewireSingleName() $>"
+        <% } else { %>
+        value="{{ old('<$ this.name $>', ($editing ? optional($<$ this.crud.model.name.case('camelCase') $>-><$ this.name $>)->format('Y-m-d') : '<$ this.defaultValue $>')) }}"
+        <% } %>
+        <$ this.min ? ` min="${this.min}"` : '' $>
+        <$ this.max ? ` max="${this.max}"` : '' $>
+        <% if(!this.crud.isForLivewire) { %>
+        <$ this.getRequiredAttributeForTemplate() $>
+        <% } %>
+    ></x-inputs.date>
+    <% } else { %>
+    <x-inputs.date 
+        name="<$ this.name $>" 
+        label="<$ this.label $>" 
+        value="{{ old('<$ this.name $>', '<$ this.defaultValue $>') }}" 
+        <$ this.min ? ` min="${this.min}"` : '' $>
+        <$ this.max ? ` max="${this.max}"` : '' $>
+        <% if(!this.crud.isForLivewire) { %>
+        <$ this.getRequiredAttributeForTemplate() $>
+        <% } %>
+    ></x-inputs.date>
+    <% } %>
+</x-inputs.group>

@@ -1,0 +1,22 @@
+@if (! empty($breadcrumbs))
+<nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
+    <ol class="breadcrumb pt-0">
+        <li class="breadcrumb-item">
+            <a href="{{ route('dashboard') }}">{{ __('dashboard') }}</a>
+        </li>
+    @foreach ($breadcrumbs as $label => $link)
+        @if (is_int($label) && ! is_int($link))
+        <li class="breadcrumb-item active" aria-current="page">
+            {{ $link }}
+        </li>
+        @else
+        <li class="breadcrumb-item">
+            <a href="{{ $link }}">
+                {{ $label }}
+            </a>
+        </li>
+        @endif
+    @endforeach
+    </ol>
+</nav>
+@endif
