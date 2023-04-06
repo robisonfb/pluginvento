@@ -32,6 +32,7 @@
     <x-inputs.text 
         name="<$ this.name $>" 
         label="<$ this.label $>" 
+        class="<$ this.name $>"
         :value="old('<$ this.name $>', '<$ this.defaultValue $>')" 
         <$ this.min ? ` minlength="${this.min}"` : '' $>
         <$ this.max ? ` maxlength="${this.max}"` : '' $>

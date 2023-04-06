@@ -32,6 +32,7 @@
     <x-inputs.textarea 
         name="<$ this.name $>" 
         label="<$ this.label $>" 
+        class="<$ this.name $>"
         <$ this.min ? ` minlength="${this.min}"` : '' $>
         <$ this.max ? ` maxlength="${this.max}"` : '' $>
     >{{ old('<$ this.name $>', '<$ this.defaultValue $>') }}</x-inputs.textarea>

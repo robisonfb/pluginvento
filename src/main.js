@@ -10,6 +10,9 @@ module.exports = (vemto) => {
 
             let basePath = '/views/frameworks/tailwind'
             let InputPath = '/views/inputs/blade'
+
+            vemto.replaceTemplate(`/Controller.vemtl`, 'files/Controller.vemtl')
+
             vemto.log.message('Start replace Jetstream ...')
             vemto.replaceTemplate(`${basePath}/AppLayoutJetstream.vemtl`, 'files/jetstream/AppLayoutJetstream.vemtl')
             vemto.replaceTemplate(`${basePath}/AppLayoutJetstream_MainDiv.vemtl`, 'files/jetstream/AppLayoutJetstream_MainDiv.vemtl')
@@ -40,6 +43,7 @@ module.exports = (vemto) => {
             vemto.replaceTemplate(`${InputPath}/Textarea.vemtl`, 'files/inputs/Textarea.vemtl')
             vemto.replaceTemplate(`${InputPath}/Url.vemtl`, 'files/inputs/Url.vemtl')
             vemto.replaceTemplate(`${InputPath}/Text.vemtl`, 'files/inputs/Text.vemtl')
+            vemto.replaceTemplate(`${InputPath}/Password.vemtl`, 'files/inputs/password.vemtl')
             
         },
 
@@ -77,6 +81,11 @@ module.exports = (vemto) => {
             
             vemto.renderTemplate('/files/components/Card.vemtl', '/resources/views/components/partials/card.blade.php')
             vemto.renderTemplate('/files/components/Thumbnail.vemtl', '/resources/views/components/partials/thumbnail.blade.php')
+            
+            vemto.renderTemplate('/files/components/Modal.vemtl', '/resources/views/components/modal.blade.php')
+
+            vemto.renderTemplate('/files/includes/Ajax.vemtl', '/resources/views/layouts/ajax.blade.php')
+
 
         },
         nodePackages(packages) {
@@ -89,6 +98,8 @@ module.exports = (vemto) => {
         composerPackages(packages) {
             // Adding packages
             packages.require['barryvdh/laravel-debugbar'] = '^3.8'
+            packages.require['yajra/laravel-datatables'] = '^10.0'
+
             return packages
         },
 

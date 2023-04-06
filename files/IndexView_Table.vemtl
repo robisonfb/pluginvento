@@ -1,89 +1,112 @@
 <% let cols = 1 %>
 <div class="row">
     <div class="col-12 mb-4 data-table-rows data-tables-hide-filter">
-        <table id="<$ crudNameSnakeCase $>-table" class="data-table responsive nowrap data-table-standard">
+        <table id="<$ crudNameSnakeCase $>_table" class="data-table responsive nowrap">
             
             <thead>
                 <tr>
+                    <th>{{ __('No') }}</th>
                     <% for(let input of this.crud.inputs) { %>
                     <% if(input.isAllowedOnIndexPages() && input.onIndex) { %>
                     <% cols++ %>
                     <th>{{ __('<$ input.name $>') }}</th>
                     <% } %>
                     <% } %>
-                    <th class="empty text-center">{{ __('action')}}</th>
+                    <th>{{ __('action')}}</th>
                 </tr>
             </thead>
             <tbody>
-                 @forelse($<$ modelPluralCamelCase $> as $<$ modelNameCamelCase $>)
-                <tr>
-                    <% for(let input of this.crud.inputs) { %>
-                    <# COMPUTED INPUT #>
-                    <% if(input.isComputed && input.onIndex) { %>
-                    <% if(input.isNumeric()) { %>
-                    <td><p class="list-item-heading text-right">{{ <$ input.computedFormula $> }}</p></td>
-                    <% } else { %>
-                    <td><p class="list-item-heading text-left">{{ <$ input.computedFormula $> }}</p></td>
-                    <% } %>
-                    <% } %>
-                    <# INPUT LINKED TO FIELD #>
-                    <% if(input.isLinkedToField() && input.onIndex) { %>
-                    <% if(input.isImage()) { %>
-                    <td><p class="list-item-heading text-left"><x-partials.thumbnail src="{{ $<$ modelNameCamelCase $>-><$ input.name $> ? \Storage::url($<$ modelNameCamelCase $>-><$ input.name $>) : '' }}"/></p></td>
-                    <% } else if(input.isFile()) { %>
-                    <td><p class="list-item-heading text-left">@if($<$ modelNameCamelCase $>-><$ input.name $>) <a href="{{ \Storage::url($<$ modelNameCamelCase $>-><$ input.name $>) }}" class="btn btn-secondary btn-xs mb-1" target="blank"><i class="glyph-icon iconsminds-download-1"></i> {{ __('download') }}</a> @else - @endif</p></td>
-                    <% } else { %>
-                    <% if(input.isForRelationship()) { %>
-                    <td><p class="list-item-heading text-left">{{ optional($<$ modelNameCamelCase $>-><$ input.relationship.name $>)-><$ input.relationship.model.getLabelFieldName() $> ?? '-' }}</p></td>
-                    <% } else if(input.isNumeric()) { %>
-                    <td><p class="list-item-heading text-right">{{ $<$ modelNameCamelCase $>-><$ input.name $> ?? '-' }}</p></td>
-                    <% } else if(input.isJson()) { %>
-                    <td><p class="list-item-heading text-right"><pre>{{ json_encode($<$ modelNameCamelCase $>-><$ input.name $>) ?? '-' }}</pre></p></td>
-                    <% } else if(input.isUrl()) { %>
-                    <td><p class="list-item-heading text-left"><a class="underline cursor-pointer" target="_blank" href="{{ $<$ modelNameCamelCase $>-><$ input.name $> }}">{{ $<$ modelNameCamelCase $>-><$ input.name $> ?? '-' }}</a></p></td>
-                    <% } else { %>
-                    <td><p class="list-item-heading text-left">{{ $<$ modelNameCamelCase $>-><$ input.name $> ?? '-' }}</p></td>
-                    <% } %>
-                    <% } %>
-                    <% } %>
-                    <% } %>
-                    <td class="text-center" style="width: 90px;">
-                        <div class="btn-group btn-group-lg actions" role="group" aria-label="actions">
-                            @can('update', $<$ modelNameCamelCase $>)
-                            <a href="{{ route('<$ modelPluralParamCase $>.edit', $<$ modelNameCamelCase $>) }}" class="mr-1">
-                                <button type="button" class="btn pr-0">
-                                    <i class="glyph-icon simple-icon-note"></i>
-                                </button>
-                            </a>
-                            @endcan
-
-                            @can('delete', $<$ modelNameCamelCase $>)
-                            <form action="{{ route('<$ modelPluralParamCase $>.destroy', $<$ modelNameCamelCase $>) }}" method="POST" onsubmit="return confirm('{{ __('are_you_sure') }}')">
-                                @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn">
-                                    <i class="glyph-icon simple-icon-trash"></i>
-                                </button>
-                            </form>
-                            @endcan
-                        </div>
-                    </td>
-                </tr>
-                @empty
-                <tr>
-                    <td colspan="<$ cols $>">{{ __('no_items_found') }}</td>
-                </tr>
-                @endforelse
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="<$ cols $>">
-                        <div class="mt-10">
-                            {!! $<$ modelPluralCamelCase $>->render() !!}
-                        </div>
-                    </td>
+                    <th></th>
+                    <% for(let input of this.crud.inputs) { %>
+                    <% if(input.isAllowedOnIndexPages() && input.onIndex) { %>
+                    <% cols++ %>
+                    <th></th>
+                    <% } %>
+                    <% } %>
+                    <th></th>
                 </tr>
             </tfoot>
         </table>
     </div>
 </div>
+
+@push('scripts')
+<x-modal  id="Modal_<$ this.model.name $>" maxWidth="lg">
+    <x-slot name="title">
+        modal Initial
+    </x-slot>
+    <x-form method="POST" action="" id="Form_<$ this.model.name $>">
+        <x-inputs.hidden name="id" class="id" ></x-inputs.hidden>
+
+        @include('<$ this.project.viewsPath() $>.<$ modelPluralSnakeCase $>.form-inputs')
+        
+        <div class="modal-footer">
+            <button type="button" class="btn btn-outline-primary" data-dismiss="modal"><i class="mr-1 glyph-icon simple-icon-close"></i> {{_('cancel')}}</button>
+            <button type="submit" class="btn btn-primary float-right" id="Save<$ this.model.name $>">
+                <i class="mr-1 glyph-icon iconsminds-disk"></i>
+                {{ __('save') }}
+            </button>
+        </div>
+    </x-form>
+</x-modal>
+
+<script type="text/javascript">
+$(function () {
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+
+    var $dataTable<$ this.model.name $> = $('#<$ crudNameSnakeCase $>_table').DataTable({
+        processing: true,
+        serverSide: true,
+        bLengthChange: false,
+        buttons: ['copy','excel','csv','pdf'],
+        destroy: true,
+        info: false,
+        sDom: '<"row view-filter"<"col-sm-12"<"float-left"l><"float-right"f><"clearfix">>>t<"row view-pager"<"col-sm-12"<"text-center"ip>>>',
+        ajax: "{{ route('<$ modelPluralParamCase $>.index') }}",
+        language: {
+            paginate: {
+                previous: "<i class='simple-icon-arrow-left'></i>",
+                next: "<i class='simple-icon-arrow-right'></i>"
+            }
+        },
+        pageLength: 2,
+        columns: [
+            <% for(let input of this.crud.inputs) { %>
+            <% if(input.isAllowedOnIndexPages() && input.onIndex) { %>
+            <% cols++ %>
+            {data: '<$ input.name $>', name: '<$ input.name $>'},
+            <% } %>
+            <% } %>
+            {data: 'action', name: 'action', orderable: false, searchable: false, width: '100'},
+        ],
+        responsive: true,
+        columnDefs: [
+            { responsivePriority: 1, targets: 0 },
+            { responsivePriority: 2, targets: -1, className: 'empty text-center' }
+        ],
+        drawCallback: function () {
+            $($(".dataTables_wrapper .pagination li:first-of-type"))
+                .find("a")
+                .addClass("prev");
+            $($(".dataTables_wrapper .pagination li:last-of-type"))
+                .find("a")
+                .addClass("next");
+            $(".dataTables_wrapper .pagination").addClass("pagination-sm");
+            var api = $(this).dataTable().api();
+            $("#pageCountDatatable span").html("Displaying " + parseInt(api.page.info().start + 1) + "-" + api.page.info().end + " of " + api.page.info().recordsTotal + " items");
+        }
+    });
+
+    @include('layouts.ajax',['AjaxModal' => ['routeAjax' => "<$ modelPluralParamCase $>",'modelAjax' => "<$ this.model.name $>"]])
+
+
+});
+</script>
+@endpush

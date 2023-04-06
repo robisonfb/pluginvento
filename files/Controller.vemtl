@@ -1,0 +1,180 @@
+<?php
+<# TEMPLATE VARIABLES #>
+<% let valuesForCompact = [] %>
+<% let createValuesForCompact = [] %>
+<% let editValuesForCompact = [] %>
+<% let viewsPrefix = this.crud.getViewsPrefix() %>
+<% let routesPrefix = this.crud.getRoutesPrefix() %>
+<% let modelNameCamelCase = this.model.name.case('camelCase') %>
+<% let modelsNamespace = this.projectHelper.getModelsNamespace() %>
+<% let hasSpecificRequests = !! this.controllerSettings.requests %>
+<% let modelPluralCamelCase = this.model.plural.case('camelCase') %>
+<% let requestsNamespace = this.projectHelper.getRequestsNamespace() %>
+<% let hasPermissions = this.generatorSettings.modules.permissions && this.model.isAuthModel() %>
+<####>
+
+namespace <$ this.projectHelper.getControllersNamespace() $>;
+
+use <$ modelsNamespace $>\<$ this.model.name $>;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+<% if(hasSpecificRequests) { %>
+use <$ requestsNamespace $>\<$ this.model.name $>StoreRequest;
+use <$ requestsNamespace $>\<$ this.model.name $>UpdateRequest;
+<% } %>
+<% if(this.crud.hasPasswordInputs()) { %>
+use Illuminate\Support\Facades\Hash;
+<% } %>
+use Illuminate\Http\RedirectResponse;
+<% if(this.crud.hasFileOrImageInputs()) { %>
+use Illuminate\Support\Facades\Storage;
+<% } %>
+<# --- #>
+<# Importing models from BelongsTo relationships #>
+<% if(this.crud.hasBelongsToInputs()) { %>
+    <% for(let input of this.crud.getBelongsToInputs()) { %>
+        <% valuesForCompact.push(input.getRelationshipCollectionName()) %>
+        <% let relModel = input.relationship.model %>
+            <% if(!this.model.is(relModel)) { %>
+            use <$ modelsNamespace $>\<$ relModel.name $>;
+            <% } %>
+    <% } %>
+<% } %>
+<# --- #>
+<# Adding permissions classes #>
+<% if(hasPermissions) { %>
+<% valuesForCompact.push('roles') %>
+use Spatie\Permission\Models\Role;
+<% } %>
+<# --- #>
+<# Checking if it needs custom validation rules #>
+<% if(this.model.hasUniqueFields() && !hasSpecificRequests) { %>
+use Illuminate\Validation\Rule;
+<% } %>
+<# --- #>
+<# Import models from BelongsToMany checkbox groups #>
+<% if(this.crud.hasBelongsToManyCheckboxGroups()) { %>
+    <% for(let component of this.crud.getBelongsToManyCheckboxGroups()) { %>
+        <% if(component.onCreate || component.onEdit) { %>
+            use <$ modelsNamespace $>\<$ component.relationship.model.name $>;
+        <% } %>
+    <% } %>
+<% } %>
+use DataTables;
+class <$ this.crud.getControllerName() $> extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     */
+    public function index(Request $request, <$ this.model.name $> $<$ modelNameCamelCase $>)
+    {
+        $this->authorize('view-any', <$ this.model.name $>::class);
+        
+        <% if(this.crud.hasBelongsToInputs()) { %>
+            <% for(let input of this.crud.getBelongsToInputsGroupedByCollection()) { %>
+                <% let relModel = input.relationship.model %>
+                <% let collectionName = input.getRelationshipCollectionName() %>
+                $<$ collectionName $> = <$ relModel.name $>::pluck('<$ relModel.getLabelFieldName() $>', '<$ relModel.getPkName() $>');
+            <% } %>
+
+        <% } %>
+
+        <% if(hasPermissions) { %>
+        $roles = Role::get();
+        <% } %>
+        
+        <# --- #>
+        <% if(this.crud.hasBelongsToManyCheckboxGroups()) { %>
+            <% for(let component of this.crud.getBelongsToManyCheckboxGroupsForCreateForm()) { %>
+                <###>
+                <% let relationshipModelPluralCamelCase = component.relationship.model.plural.case('camelCase') %>
+                <% createValuesForCompact.push(relationshipModelPluralCamelCase) %>
+                <###>
+                $<$ relationshipModelPluralCamelCase $> = <$ component.relationship.model.name $>::get();
+            <% } %>
+        <% } %>
+
+        if ($request->ajax()) {
+            return Datatables::of($<$ modelNameCamelCase $>->latest()->get())
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="' . __('edit') . '" class="edit btn  pr-0 edit<$ this.model.name $>"><i class="glyph-icon simple-icon-note"></i></a>';
+                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="' . __('delete') . '" class="btn  delete<$ this.model.name $>"><i class="glyph-icon simple-icon-trash"></i></a>';
+                    return $btn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
+        <# BelongsToMany checkbox groups #>
+        <% if(this.crud.hasBelongsToManyCheckboxGroups()) { %>
+            <% for(let component of this.crud.getBelongsToManyCheckboxGroupsForEditForm()) { %>
+                <###>
+                <% let relationshipModelPluralCamelCase = component.relationship.model.plural.case('camelCase') %>
+                <% editValuesForCompact.push(relationshipModelPluralCamelCase) %>
+                <###>
+                $<$ relationshipModelPluralCamelCase $> = <$ component.relationship.model.name $>::get();
+            <% } %>
+        <% } %>
+
+        <% let hasEditValuesForCompact = valuesForCompact.length || editValuesForCompact.length %>
+
+        return view('<$ viewsPrefix $>.index', compact('<$ modelNameCamelCase $>'<% if(hasEditValuesForCompact) { %>
+        , '<$ [].concat(valuesForCompact, editValuesForCompact).join("', '") $>'
+        <% } %>));
+
+    }
+
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    <% let storeRequestName = hasSpecificRequests ? this.model.name + 'StoreRequest' : 'Request' %>
+    public function store(<$ storeRequestName $> $request)
+    {
+        $this->authorize('create', <$ this.model.name $>::class);
+
+
+        $validated = $request->validated();
+
+
+
+        $<$ modelNameCamelCase $> = <$ this.model.name $>::updateOrCreate(
+        ['id' => $request->id ] ,
+        [ <% for (let input of this.crud.inputs) { %>'<$ input.name $>' => $request-><$ input.name $>, <% } %>]
+        );
+        
+        
+        return response()->json(['success' => __('crud.common.created') ]);
+    }
+
+
+
+    public function edit(Request $request, <$ this.model.name $> $<$ modelNameCamelCase $>)
+    {
+        $this->authorize('update', $<$ modelNameCamelCase $>);
+        
+        return response()->json($<$ modelNameCamelCase $>);
+    }
+
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Request $request, <$ this.model.name $> $<$ modelNameCamelCase $>)
+    {
+        $this->authorize('delete', $<$ modelNameCamelCase $>);
+
+        <% if(this.crud.hasFileOrImageInputs()) { %>
+            <% for(let input of this.crud.getFileAndImageInputs()) { %>
+            if($<$ modelNameCamelCase $>-><$ input.name $>) {
+                Storage::delete($<$ modelNameCamelCase $>-><$ input.name $>);
+            }
+
+            <% } %>
+        <% } %>
+        $<$ modelNameCamelCase $>->delete();
+
+        return response()->json(['success' => __('crud.common.removed')]);
+    }
+}

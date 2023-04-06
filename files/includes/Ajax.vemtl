@@ -1,0 +1,107 @@
+@if (! empty($AjaxModal))
+$('#Create_{{$AjaxModal['modelAjax']}}').click(function () {
+    $('#Form_{{$AjaxModal['modelAjax']}} .id').val('');
+    $('#Form_{{$AjaxModal['modelAjax']}}').trigger("reset");
+    $('#Form_{{$AjaxModal['modelAjax']}} select').val('').trigger('change');
+    $('#Modal_{{$AjaxModal['modelAjax']}} .modal-title').html("{{ __("Create New")}} {{$AjaxModal['modelAjax']}}");
+    $('#Modal_{{$AjaxModal['modelAjax']}}').modal('show');
+});
+
+$('body').on('click', '.edit{{$AjaxModal['modelAjax']}}', function () {
+    var id = $(this).data('id');
+    $.get("{{ route($AjaxModal['routeAjax'] . '.index') }}" +'/' + id +'/edit', function (data) {
+        $('#Modal_{{$AjaxModal['modelAjax']}} .modal-title').html("{{ __("Edit")}} {{$AjaxModal['modelAjax']}}");
+        $('#Modal_{{$AjaxModal['modelAjax']}}').modal('show');
+
+
+        $.each (data, function (index, item) {
+
+            var type = $('#Modal_{{$AjaxModal['modelAjax']}} .' + index).prop("tagName")
+            if( type == "INPUT"){
+                $('#Modal_{{$AjaxModal['modelAjax']}} .' + index).val(item);
+            }
+
+            if (type == "TEXTAREA"){
+                $('#Modal_{{$AjaxModal['modelAjax']}} .' + index).val(item);
+            }
+
+            if (type == "SELECT"){
+                $('#Form_{{$AjaxModal['modelAjax']}} .' + index).val(item).trigger('change');
+            }
+
+        });
+    })
+});
+
+$('#Save{{$AjaxModal['modelAjax']}}').click(function (e) {
+    e.preventDefault();
+    $('#Save{{$AjaxModal['modelAjax']}}').html('<i class="mr-1 glyph-icon simple-icon-hourglass"></i> {{__('sending')}}');
+
+    $.ajax({
+        data: $('#Form_{{$AjaxModal['modelAjax']}}').serialize(),
+        url: "{{ route($AjaxModal['routeAjax'] . '.store') }}",
+        type: "POST",
+        dataType: 'json',
+        success: function (data) {
+            $('#Form_{{$AjaxModal['modelAjax']}}').trigger("reset");
+            $('#Modal_{{$AjaxModal['modelAjax']}}').modal('hide');
+            $dataTable{{$AjaxModal['modelAjax']}}.draw();
+            $('#Save{{$AjaxModal['modelAjax']}}').html('<i class="mr-1 glyph-icon iconsminds-disk"></i> {{ __('save') }}');
+            showNotification('<strong>Update</strong>', 'Save Changes.', 'success"')
+            
+
+        },
+        error: function (data) {
+            console.log('Error:', data);
+            $('#Save{{$AjaxModal['modelAjax']}}').html('<i class="mr-1 glyph-icon iconsminds-disk"></i>{{ __('save') }}');
+        }
+    });
+});
+
+$('body').on('click', '.delete{{$AjaxModal['modelAjax']}}', function () {
+
+    var id = $(this).data("id");
+    if (confirm("Are You sure want to delete this Post!") == true) {
+        $.ajax({
+            type: "DELETE",
+            url: "{{ route($AjaxModal['routeAjax'] . '.store') }}"+'/'+id,
+            success: function (data) {
+                $dataTable{{$AjaxModal['modelAjax']}}.draw();
+                showNotification('<strong>Update</strong>', 'Deleted.', 'warning"')
+            },
+            error: function (data) {
+                console.log('Error:', data);
+            }
+        });
+    }
+});
+
+$("#dataTablesCopy").on("click", function (event) {
+    event.preventDefault();
+    $dataTable{{$AjaxModal['modelAjax']}}.buttons(0).trigger();
+});
+
+$("#dataTablesExcel").on("click", function (event) {
+    event.preventDefault();
+    $dataTable{{$AjaxModal['modelAjax']}}.buttons(1).trigger();
+});
+
+$("#dataTablesCsv").on("click", function (event) {
+    event.preventDefault();
+    $dataTable{{$AjaxModal['modelAjax']}}.buttons(2).trigger();
+});
+
+$("#dataTablesPdf").on("click", function (event) {
+    event.preventDefault();
+    $dataTable{{$AjaxModal['modelAjax']}}.buttons(3).trigger();
+});
+
+$("#searchDatatable").on("keyup", function (event) {
+    $dataTable{{$AjaxModal['modelAjax']}}.search($(this).val()).draw();
+});
+
+$("#pageCountDatatable .dropdown-menu a").on("click", function (event) {
+    var selText = $(this).text();
+    $dataTable{{$AjaxModal['modelAjax']}}.page.len(parseInt(selText)).draw();
+});
+@endif

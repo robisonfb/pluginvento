@@ -14,18 +14,15 @@
                     <a class="dropdown-item" id="dataTablesPdf" href="#">{{ __('pdf') }}</a>
                 </div>
             </div>
-            
+
             @can('create', <$ this.projectHelper.getModelsNamespace() $>\<$ this.model.name $>::class)
-            <a href="{{ route('<$ modelPluralParamCase $>.create') }}" class="btn btn-outline-primary btn-lg top-right-button  mr-1">
+            <button type="button" class="btn btn-outline-primary btn-lg top-right-button  mr-1" data-toggle="modal" data-backdrop="static" id="Create_<$ this.model.name $>">
                 {{ __('add_new') }}
-            </a>
+            </button>
             @endcan
         </div>
         
-        @include('layouts.breadcrumbs', ['breadcrumbs' => [
-            '<$ crudNameSnakeCase $>' => route('<$ modelPluralParamCase $>.index'),
-            __('list_<$ crudNameSnakeCase $>'),
-        ]])
+        @include('layouts.breadcrumbs',['breadcrumbs' =>['<$ crudNameSnakeCase $>' => route('<$ modelPluralParamCase $>.index'), __('list_<$ crudNameSnakeCase $>')]])
 
         <div class="mb-2">
             <a class="btn pt-0 pl-0 d-inline-block d-md-none" data-toggle="collapse"
@@ -50,6 +47,7 @@
                         <a class="dropdown-item" href="#">5</a>
                         <a class="dropdown-item active" href="#">10</a>
                         <a class="dropdown-item" href="#">20</a>
+                        <a class="dropdown-item" href="#">All</a>
                     </div>
                 </div>
             </div>

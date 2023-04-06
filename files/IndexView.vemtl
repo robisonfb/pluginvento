@@ -1,22 +1,15 @@
 <# TEMPLATE VARIABLES #>
 <% let crudNameSnakeCase = this.crud.name.case('snakeCase') %>
 <% let modelNameCamelCase = this.model.name.case('camelCase') %>
+<% let modelPluralSnakeCase = this.model.plural.case('snakeCase') %>
 <% let modelPluralParamCase = this.model.plural.case('paramCase') %>
 <% let modelPluralCamelCase = this.model.plural.case('camelCase') %>
 <####>
 <####>
-<x-app-layout>
+<x-app-layout :title="' - ' . __('<$ modelPluralParamCase $>')">
 <div class="container-fluid">
     <import template="IndexView_Searchbar">
 
     <import template="IndexView_Table">
 </div>
 </x-app-layout>
-
-@push('scripts')
-<scripts>
-    let table = new DataTable('#<$ crudNameSnakeCase $>-table', {
-        responsive: true
-    });
-</scripts>
-@endpush

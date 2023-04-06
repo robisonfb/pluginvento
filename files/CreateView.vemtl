@@ -3,7 +3,7 @@
 <% let modelPluralParamCase = this.model.plural.case('paramCase') %>
 <% let crudNameSnakeCase = this.crud.name.case('snakeCase') %>
 <####>
-<x-app-layout>
+<x-app-layout :title="' - {{ __('Update <$ modelPluralParamCase $>') }}'">
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">    

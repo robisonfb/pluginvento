@@ -29,7 +29,10 @@
 <% } %>
 <####>
 <x-inputs.group class="<$ cssClass $>">
-    <x-inputs.select name="<$ this.name $>" label="<$ this.label $>">
+    <x-inputs.select 
+    name="<$ this.name $>" 
+    class="<$ this.name $>" 
+    label="<$ this.label $>">
         <% for(let item of this.items) { %>
         <option value="<$ item.value $>"><$ item.label $></option>
         <% } %>

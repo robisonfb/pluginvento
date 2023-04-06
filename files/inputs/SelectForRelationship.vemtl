@@ -36,6 +36,7 @@
     <x-inputs.select 
         name="<$ this.livewireInputReference || this.name $>" 
         label="<$ this.label $>" 
+        class="<$ this.label $>" 
         <% if(isForLivewire) { %>
         wire:model="<$ this.livewireInputReference $>"
         <% } %>

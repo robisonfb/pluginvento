@@ -51,6 +51,7 @@
     <% } else { %>
     <x-inputs.date 
         name="<$ this.name $>" 
+        class="<$ this.name $>" 
         label="<$ this.label $>" 
         value="{{ old('<$ this.name $>', '<$ this.defaultValue $>') }}" 
         <$ this.min ? ` min="${this.min}"` : '' $>

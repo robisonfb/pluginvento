@@ -30,6 +30,7 @@
 <x-inputs.group class="<$ cssClass $>">
     <x-inputs.url 
         name="<$ this.name $>" 
+        class="<$ this.name $>" 
         label="<$ this.label $>" 
         :value="old('<$ this.name $>', '<$ this.defaultValue $>')" 
         <$ this.min ? ` minlength="${this.min}"` : '' $>

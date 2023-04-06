@@ -30,6 +30,7 @@
 <x-inputs.group class="<$ cssClass $>">
     <x-inputs.checkbox 
         name="<$ this.name $>" 
+        class="<$ this.name $>" 
         label="<$ this.label $>" 
         :checked="old('<$ this.name $>', '<$ this.defaultValue $>') ? true : false"
     ></x-inputs.checkbox>
