@@ -36,7 +36,7 @@
         <% } else { %>
         name="<$ this.name $>" 
         <% } %>
-        label="<$ this.label $>"
+        label="{{__('<$ this.label $>')}}"
         <% if(this.crud.isForLivewire) { %>
         wire:model="<$ this.getLivewireSingleName() $>"
         <% } else { %>
@@ -52,8 +52,8 @@
     <x-inputs.date 
         name="<$ this.name $>" 
         class="<$ this.name $>" 
-        label="<$ this.label $>" 
-        value="{{ old('<$ this.name $>', '<$ this.defaultValue $>') }}" 
+        label="{{__('<$ this.label $>')}}" 
+        value="{{ old('<$ this.name $>', '<$ this.defaultValue $>')}}" 
         <$ this.min ? ` min="${this.min}"` : '' $>
         <$ this.max ? ` max="${this.max}"` : '' $>
         <% if(!this.crud.isForLivewire) { %>

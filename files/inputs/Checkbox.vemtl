@@ -31,7 +31,7 @@
     <x-inputs.checkbox 
         name="<$ this.name $>" 
         class="<$ this.name $>" 
-        label="<$ this.label $>" 
+        label="{{__('{{__('<$ this.label $>')}}')}}" 
         :checked="old('<$ this.name $>', '<$ this.defaultValue $>') ? true : false"
     ></x-inputs.checkbox>
 </x-inputs.group>

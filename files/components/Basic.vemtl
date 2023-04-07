@@ -15,7 +15,7 @@
 <input
     type="{{ $type }}"
     name="{{ $name }}"
-    value="{{ old($name, $value ?? '') }}"
+    value="{{ old($name, $value ?? '')}}"
     {{ ($required ?? false) ? 'required' : '' }}
     {{ $attributes->merge(['class' => 'form-control position-relative']) }}
     {{ $min ? "min={$min}" : '' }}

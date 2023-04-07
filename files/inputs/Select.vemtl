@@ -32,7 +32,7 @@
     <x-inputs.select 
     name="<$ this.name $>" 
     class="<$ this.name $>" 
-    label="<$ this.label $>">
+    label="{{__('<$ this.label $>')}}">
         <% for(let item of this.items) { %>
         <option value="<$ item.value $>"><$ item.label $></option>
         <% } %>

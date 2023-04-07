@@ -4,9 +4,10 @@
 <% let modelPluralSnakeCase = this.model.plural.case('snakeCase') %>
 <% let modelPluralParamCase = this.model.plural.case('paramCase') %>
 <% let modelPluralCamelCase = this.model.plural.case('camelCase') %>
+<% let modelPluralSentenceCase = this.model.plural.case('sentenceCase') %>
 <####>
 <####>
-<x-app-layout :title="' - ' . __('<$ modelPluralParamCase $>')">
+<x-app-layout :title="' - ' . __('<$ modelPluralSentenceCase $>')">
 <div class="container-fluid">
     <import template="IndexView_Searchbar">
 

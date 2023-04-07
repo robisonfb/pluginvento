@@ -3,14 +3,14 @@ $('#Create_{{$AjaxModal['modelAjax']}}').click(function () {
     $('#Form_{{$AjaxModal['modelAjax']}} .id').val('');
     $('#Form_{{$AjaxModal['modelAjax']}}').trigger("reset");
     $('#Form_{{$AjaxModal['modelAjax']}} select').val('').trigger('change');
-    $('#Modal_{{$AjaxModal['modelAjax']}} .modal-title').html("{{ __("Create New")}} {{$AjaxModal['modelAjax']}}");
+    $('#Modal_{{$AjaxModal['modelAjax']}} .modal-title').html("{{__("Create New")}} {{$AjaxModal['modelAjax']}}");
     $('#Modal_{{$AjaxModal['modelAjax']}}').modal('show');
 });
 
 $('body').on('click', '.edit{{$AjaxModal['modelAjax']}}', function () {
     var id = $(this).data('id');
-    $.get("{{ route($AjaxModal['routeAjax'] . '.index') }}" +'/' + id +'/edit', function (data) {
-        $('#Modal_{{$AjaxModal['modelAjax']}} .modal-title').html("{{ __("Edit")}} {{$AjaxModal['modelAjax']}}");
+    $.get("{{ route($AjaxModal['routeAjax'] . '.index')}}" +'/' + id +'/edit', function (data) {
+        $('#Modal_{{$AjaxModal['modelAjax']}} .modal-title').html("{{__("Edit")}} {{$AjaxModal['modelAjax']}}");
         $('#Modal_{{$AjaxModal['modelAjax']}}').modal('show');
 
 
@@ -35,25 +35,25 @@ $('body').on('click', '.edit{{$AjaxModal['modelAjax']}}', function () {
 
 $('#Save{{$AjaxModal['modelAjax']}}').click(function (e) {
     e.preventDefault();
-    $('#Save{{$AjaxModal['modelAjax']}}').html('<i class="mr-1 glyph-icon simple-icon-hourglass"></i> {{__('sending')}}');
+    $('#Save{{$AjaxModal['modelAjax']}}').html('<i class="mr-1 glyph-icon simple-icon-hourglass"></i> {{__('Sending')}}');
 
     $.ajax({
         data: $('#Form_{{$AjaxModal['modelAjax']}}').serialize(),
-        url: "{{ route($AjaxModal['routeAjax'] . '.store') }}",
+        url: "{{ route($AjaxModal['routeAjax'] . '.store')}}",
         type: "POST",
         dataType: 'json',
         success: function (data) {
             $('#Form_{{$AjaxModal['modelAjax']}}').trigger("reset");
             $('#Modal_{{$AjaxModal['modelAjax']}}').modal('hide');
             $dataTable{{$AjaxModal['modelAjax']}}.draw();
-            $('#Save{{$AjaxModal['modelAjax']}}').html('<i class="mr-1 glyph-icon iconsminds-disk"></i> {{ __('save') }}');
+            $('#Save{{$AjaxModal['modelAjax']}}').html('<i class="mr-1 glyph-icon iconsminds-disk"></i> {{__('Save')}}');
             showNotification('<strong>Update</strong>', 'Save Changes.', 'success"')
             
 
         },
         error: function (data) {
             console.log('Error:', data);
-            $('#Save{{$AjaxModal['modelAjax']}}').html('<i class="mr-1 glyph-icon iconsminds-disk"></i>{{ __('save') }}');
+            $('#Save{{$AjaxModal['modelAjax']}}').html('<i class="mr-1 glyph-icon iconsminds-disk"></i> {{__('Save')}}');
         }
     });
 });
@@ -64,7 +64,7 @@ $('body').on('click', '.delete{{$AjaxModal['modelAjax']}}', function () {
     if (confirm("Are You sure want to delete this Post!") == true) {
         $.ajax({
             type: "DELETE",
-            url: "{{ route($AjaxModal['routeAjax'] . '.store') }}"+'/'+id,
+            url: "{{ route($AjaxModal['routeAjax'] . '.store')}}"+'/'+id,
             success: function (data) {
                 $dataTable{{$AjaxModal['modelAjax']}}.draw();
                 showNotification('<strong>Update</strong>', 'Deleted.', 'warning"')

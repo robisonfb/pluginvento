@@ -20,13 +20,13 @@
             </svg>
         </a>
         <div class="search" data-search-path="Pages.Search.html?q=">
-            <input placeholder="Search...">
+            <input placeholder="{{__('Search')}}">
             <span class="search-icon">
                 <i class="simple-icon-magnifier"></i>
             </span>
         </div>
     </div>
-    <a class="navbar-logo" href="{{ route('dashboard') }}">
+    <a class="navbar-logo" href="{{ route('dashboard')}}">
         <span class="logo d-none d-xs-block"></span>
         <span class="logo-mobile d-block d-xs-none"></span>
     </a>
@@ -47,27 +47,27 @@
                 <div class="dropdown-menu dropdown-menu-right mt-3  position-absolute" id="iconMenuDropdown">
                     <a href="#" class="icon-menu-item">
                         <i class="iconsminds-equalizer d-block"></i>
-                        <span>{{ __('Settings') }}</span>
+                        <span>{{__('Settings')}}</span>
                     </a>
                     <a href="#" class="icon-menu-item">
                         <i class="iconsminds-male-female d-block"></i>
-                        <span>{{ __('Users') }}</span>
+                        <span>{{__('Users')}}</span>
                     </a>
                     <a href="#" class="icon-menu-item">
                         <i class="iconsminds-puzzle d-block"></i>
-                        <span>{{ __('Components') }}</span>
+                        <span>{{__('Components')}}</span>
                     </a>
                     <a href="#" class="icon-menu-item">
                         <i class="iconsminds-bar-chart-4 d-block"></i>
-                        <span>{{ __('Profits') }}</span>
+                        <span>{{__('Profits')}}</span>
                     </a>
                     <a href="#" class="icon-menu-item">
                         <i class="iconsminds-file d-block"></i>
-                        <span>{{ __('Surveys')}}</span>
+                        <span>{{__('Surveys')}}</span>
                     </a>
                     <a href="#" class="icon-menu-item">
                         <i class="iconsminds-suitcase d-block"></i>
-                        <span>{{ __('Tasks') }}</span>
+                        <span>{{__('Tasks')}}</span>
                     </a>
                 </div>
             </div>
@@ -134,11 +134,26 @@
                     </div>
                 </div>
             </div>
-            <button class="header-icon btn btn-empty d-none d-sm-inline-block" type="button"
-                id="fullScreenButton">
-                <i class="simple-icon-size-fullscreen"></i>
-                <i class="simple-icon-size-actual"></i>
+        </div>
+        <div class="position-relative d-inline-block pr-4 pl-4">
+            @php $locale = session()->get('locale'); @endphp
+            <button class="btn btn-empty p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                @switch($locale)
+                    @case('de')
+                        <span class="name"><span class="fi fi-gr mr-1"></span>  {{ __('German') }}</span>
+                    @break
+                    @case('pt')
+                        <span class="name"><span class="fi fi-br mr-1"></span>  {{ __('Portuguese') }}</span>
+                    @break
+                    @default
+                        <span class="name"><span class="fi fi-us mr-1"></span>  {{ __('English') }}</span>
+                @endswitch
             </button>
+            <div class="dropdown-menu dropdown-menu-right mt-3">
+                <a class="dropdown-item" href="{{ route('lang', 'en') }}"><span class="fi fi-us mr-1"></span> {{__('English')}}</a>
+                <a class="dropdown-item" href="{{ route('lang', 'de') }}"><span class="fi fi-de mr-1"></span> {{__('German')}}</a>
+                <a class="dropdown-item" href="{{ route('lang', 'pt') }}"><span class="fi fi-br mr-1"></span> {{__('Portuguese')}}</a>
+            </div>
         </div>
         <div class="user d-inline-block">
             <button class="btn btn-empty p-0" type="button" data-toggle="dropdown" aria-haspopup="true"
@@ -149,10 +164,10 @@
                 </span>
             </button>
             <div class="dropdown-menu dropdown-menu-right mt-3">
-                <a class="dropdown-item" href="#">{{ __('Account') }}</a>
-                <a class="dropdown-item" href="#">{{ __('Features') }}</a>
-                <a class="dropdown-item" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{ __('Sign out') }}</a>
-                <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                <a class="dropdown-item" href="#">{{__('Account')}}</a>
+                <a class="dropdown-item" href="#">{{__('Features')}}</a>
+                <a class="dropdown-item" href="{{ route('logout')}}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">{{__('Sign out')}}</a>
+                <form id="logout-form" action="{{ route('logout')}}" method="POST" style="display: none;">
                     @csrf
                 </form>
             </div>

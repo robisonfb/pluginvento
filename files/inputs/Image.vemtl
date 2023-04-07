@@ -46,7 +46,7 @@
         x-data="imageViewer('{{ $editing && $<$ this.crud.model.name.case('camelCase') $>-><$ this.name $> ? \Storage::url($<$ this.crud.model.name.case('camelCase') $>-><$ this.name $>) : '' }}')"
     >
     <% } %>
-        <x-inputs.partials.label name="<$ this.crud.isForLivewire ? this.getLivewireSingleName() : this.name $>" label="<$ this.label $>"></x-inputs.partials.label><br>
+        <x-inputs.partials.label name="<$ this.crud.isForLivewire ? this.getLivewireSingleName() : this.name $>" label="{{__('<$ this.label $>')}}"></x-inputs.partials.label><br>
         <!-- Show the image -->
         <template x-if="imageUrl">
             <img :src="imageUrl" 

@@ -2,7 +2,7 @@
 <nav class="breadcrumb-container d-none d-sm-block d-lg-inline-block" aria-label="breadcrumb">
     <ol class="breadcrumb pt-0">
         <li class="breadcrumb-item">
-            <a href="{{ route('dashboard') }}">{{ __('dashboard') }}</a>
+            <a href="{{ route('dashboard')}}">{{__('Dashboard')}}</a>
         </li>
     @foreach ($breadcrumbs as $label => $link)
         @if (is_int($label) && ! is_int($link))

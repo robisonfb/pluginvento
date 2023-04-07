@@ -12,6 +12,7 @@ module.exports = (vemto) => {
             let InputPath = '/views/inputs/blade'
 
             vemto.replaceTemplate(`/Controller.vemtl`, 'files/Controller.vemtl')
+            vemto.replaceTemplate(`/Routes.vemtl`, 'files/Routes.vemtl')
 
             vemto.log.message('Start replace Jetstream ...')
             vemto.replaceTemplate(`${basePath}/AppLayoutJetstream.vemtl`, 'files/jetstream/AppLayoutJetstream.vemtl')
@@ -85,6 +86,9 @@ module.exports = (vemto) => {
             vemto.renderTemplate('/files/components/Modal.vemtl', '/resources/views/components/modal.blade.php')
 
             vemto.renderTemplate('/files/includes/Ajax.vemtl', '/resources/views/layouts/ajax.blade.php')
+
+            
+            vemto.renderTemplate('/files/LocalizationController.vemtl', 'App/Http/Controllers/LocalizationController.blade.php')
 
 
         },

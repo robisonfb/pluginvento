@@ -28,7 +28,7 @@
 <% } %>
 <####>
 <x-inputs.group class="<$ cssClass $>">
-    <x-inputs.partials.label name="<$ this.crud.isForLivewire ? this.getLivewireSingleName() : this.name $>" label="<$ this.label $>"></x-inputs.partials.label><br>
+    <x-inputs.partials.label name="<$ this.crud.isForLivewire ? this.getLivewireSingleName() : this.name $>" label="{{__('<$ this.label $>')}}"></x-inputs.partials.label><br>
     
     <input 
         type="file" 

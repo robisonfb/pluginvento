@@ -31,10 +31,10 @@
     <x-inputs.url 
         name="<$ this.name $>" 
         class="<$ this.name $>" 
-        label="<$ this.label $>" 
+        label="{{__('<$ this.label $>')}}" 
         :value="old('<$ this.name $>', '<$ this.defaultValue $>')" 
         <$ this.min ? ` minlength="${this.min}"` : '' $>
         <$ this.max ? ` maxlength="${this.max}"` : '' $>
-        <$ this.placeholder ? ` placeholder="${this.placeholder}"` : '' $>
+        <$ this.placeholder ? ` placeholder="{{__('${this.placeholder}')}}"` : '' $>
     ></x-inputs.url>
 </x-inputs.group>

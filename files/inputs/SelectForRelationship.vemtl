@@ -35,8 +35,8 @@
 <x-inputs.group class="<$ cssClass $>">
     <x-inputs.select 
         name="<$ this.livewireInputReference || this.name $>" 
-        label="<$ this.label $>" 
-        class="<$ this.label $>" 
+        label="{{__('<$ this.label $>')}}" 
+        class="{{__('<$ this.label $>')}}" 
         <% if(isForLivewire) { %>
         wire:model="<$ this.livewireInputReference $>"
         <% } %>
