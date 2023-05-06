@@ -83,6 +83,7 @@ Route::prefix('/')
     <###>
     <% if(this.project.settings.routesMode == 'resource' && !crud.model.pluralAndSingularAreSame) { %>
     Route::resource('<$ crud.url $>', <$ controllerName $>::class);
+    Route::delete('<$ crud.url $>/{<$ crudModelNameCamelCase $>}/remove-file/{file}', [<$ controllerName $>::class, 'removeFile'])->name('<$ crud.url $>.removeFile');
     <% } else { %>
     Route::get('<$ crud.url $>', [<$ controllerName $>::class, 'index'])->name('<$ crudModelPluralParamCase $>.index');
     Route::post('<$ crud.url $>', [<$ controllerName $>::class, 'store'])->name('<$ crudModelPluralParamCase $>.store');

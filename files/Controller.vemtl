@@ -61,6 +61,7 @@ use Illuminate\Validation\Rule;
     <% } %>
 <% } %>
 use DataTables;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 class <$ this.crud.getControllerName() $> extends Controller
 {
     /**
@@ -70,6 +71,18 @@ class <$ this.crud.getControllerName() $> extends Controller
     {
         $this->authorize('view-any', <$ this.model.name $>::class);
         
+        if ($request->ajax()) {
+            return Datatables::of($<$ modelNameCamelCase $>->latest()->get())
+                ->addIndexColumn()
+                ->addColumn('action', function ($row) {
+                    $editBtn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="' . __('Edit') . '" class="edit btn  pr-0 edit<$ this.model.name $>"><i class="glyph-icon simple-icon-note"></i></a>';
+                    $deleteBtn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="' . __('Delete') . '" class="btn  delete<$ this.model.name $>"><i class="glyph-icon simple-icon-trash"></i></a>';
+                    return $editBtn . $deleteBtn;
+                })
+                ->rawColumns(['action'])
+                ->make(true);
+        }
+
         <% if(this.crud.hasBelongsToInputs()) { %>
             <% for(let input of this.crud.getBelongsToInputsGroupedByCollection()) { %>
                 <% let relModel = input.relationship.model %>
@@ -94,18 +107,6 @@ class <$ this.crud.getControllerName() $> extends Controller
             <% } %>
         <% } %>
 
-        if ($request->ajax()) {
-            return Datatables::of($<$ modelNameCamelCase $>->latest()->get())
-                ->addIndexColumn()
-                ->addColumn('action', function ($row) {
-                    $btn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="' . __('edit') . '" class="edit btn  pr-0 edit<$ this.model.name $>"><i class="glyph-icon simple-icon-note"></i></a>';
-                    $btn = $btn . ' <a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="' . __('delete') . '" class="btn  delete<$ this.model.name $>"><i class="glyph-icon simple-icon-trash"></i></a>';
-                    return $btn;
-                })
-                ->rawColumns(['action'])
-                ->make(true);
-        }
-
         <# BelongsToMany checkbox groups #>
         <% if(this.crud.hasBelongsToManyCheckboxGroups()) { %>
             <% for(let component of this.crud.getBelongsToManyCheckboxGroupsForEditForm()) { %>
@@ -125,38 +126,112 @@ class <$ this.crud.getControllerName() $> extends Controller
 
     }
 
-
     /**
      * Store a newly created resource in storage.
      */
     <% let storeRequestName = hasSpecificRequests ? this.model.name + 'StoreRequest' : 'Request' %>
     public function store(<$ storeRequestName $> $request)
     {
-        $this->authorize('create', <$ this.model.name $>::class);
+        try {
+            $validated = $request->validated();
 
+            <# Checking for CRUD file inputs #>
+            <% if(this.crud.hasFileOrImageInputs()) { %>
+                $fileFields = [
+                <% for(let input of this.crud.getFileAndImageInputs()) { %>
+                    '<$ input.name $>',
+                <% } %>
+                ];
+            <% } %>
+            
 
-        $validated = $request->validated();
+            <% if(hasPermissions) { %>
+            $<$ modelNameCamelCase $>->syncRoles($request->roles);
+            <% } %>
+            
+            if ($request->input('id') === null) {
+                $discord = new <$ this.model.name $>();
+                $this->authorize('create', $<$ modelNameCamelCase $>);
+                <# --- #>
+                <# Checking for CRUD password inputs #>
+                <% if(this.crud.hasPasswordInputs()) { %>
+                        <% for(let input of this.crud.getPasswordInputs()) { %>
+                            <% if(!input.isRequiredOnCreate()) { %>
+                            if(!empty($validated['<$ input.name $>'])) {
+                            <% } %>
+                            $validated['<$ input.name $>'] = Hash::make($validated['<$ input.name $>']);
+                            <% if(!input.isRequiredOnCreate()) { %>
+                            }
+                            <% } %>
+                        <% } %>
+                <% } %>
 
+                $validated = $this->handleFiles(
+                    $request,
+                    $<$ modelNameCamelCase $>,
+                    $validated,
+                    $fileFields
+                );
 
+                $<$ modelNameCamelCase $>->create($validated);
+                $message = __('Record created');
+            } else {
+                $<$ modelNameCamelCase $> = <$ this.model.name $>::findOrFail($request->input('id'));
+                $this->authorize('update', $<$ modelNameCamelCase $>);
+                <# --- #>
+                <# Checking for CRUD password inputs #>
+                <% if(this.crud.hasPasswordInputs()) { %>
 
-        $<$ modelNameCamelCase $> = <$ this.model.name $>::updateOrCreate(
-        ['id' => $request->id ] ,
-        [ <% for (let input of this.crud.inputs) { %>'<$ input.name $>' => $request-><$ input.name $>, <% } %>]
-        );
-        
-        
-        return response()->json(['success' => __('crud.common.created') ]);
+                    <% for(let input of this.crud.getPasswordInputs()) { %>
+                        <% if(!input.isRequiredOnCreate()) { %>
+                        if(!empty($validated['<$ input.name $>'])) {
+                        <% } %>
+                        $validated['<$ input.name $>'] = Hash::make($validated['<$ input.name $>']);
+                        <% if(!input.isRequiredOnCreate()) { %>
+                        }
+                        <% } %>
+                    <% } %>
+                <% } %>
+                $validated = $this->handleFiles($request, $<$ modelNameCamelCase $>, $validated, $fileFields);
+                $<$ modelNameCamelCase $>->update($validated);
+                $message = __('Updated record');
+            }
+
+            return response()->json(['success' => $message]);
+        } catch (ModelNotFoundException $e) {
+            $errorData = config('app.env') === 'local' ? $e : null;
+            return response()->json(['error' => __('Register not found'), 'data' => $errorData], 404);
+        } catch (\Exception $e) {
+            $errorData = config('app.env') === 'local' ? $e : null;
+            return response()->json(['error' => __('An error occurred while processing the request'), 'data' => $errorData], 500);
+        }
     }
-
-
 
     public function edit(Request $request, <$ this.model.name $> $<$ modelNameCamelCase $>)
     {
-        $this->authorize('update', $<$ modelNameCamelCase $>);
-        
-        return response()->json($<$ modelNameCamelCase $>);
-    }
+        try {
+            $this->authorize('update', $<$ modelNameCamelCase $>);
 
+            <# Checking for CRUD file inputs #>
+            <% if(this.crud.hasFileOrImageInputs()) { %>
+                <% for(let input of this.crud.getFileAndImageInputs()) { %>
+
+                    if ($<$ modelNameCamelCase $>-><$ input.name $>) {
+                        $<$ modelNameCamelCase $>-><$ input.name $> = asset('storage/' . $<$ modelNameCamelCase $>-><$ input.name $>);
+                    }
+
+                <% } %>
+            <% } %>
+
+            return response()->json($<$ modelNameCamelCase $>);
+        } catch (ModelNotFoundException $e) {
+            $errorData = config('app.env') === 'local' ? $e : null;
+            return response()->json(['error' => __('Register not found'), 'data' => $errorData], 404);
+        } catch (\Exception $e) {
+            $errorData = config('app.env') === 'local' ? $e : null;
+            return response()->json(['error' => __('An error occurred while processing the request'), 'data' => $errorData], 500);
+        }
+    }
 
     /**
      * Remove the specified resource from storage.
@@ -176,5 +251,33 @@ class <$ this.crud.getControllerName() $> extends Controller
         $<$ modelNameCamelCase $>->delete();
 
         return response()->json(['success' => __('crud.common.removed')]);
+    }
+
+    public function removeFile(Request $request, <$ this.model.name $> $<$ modelNameCamelCase $>, $file)
+    {
+        $this->authorize('delete', $<$ modelNameCamelCase $>);
+
+        if ($<$ modelNameCamelCase $>->$file) {
+            Storage::disk('public')->delete($<$ modelNameCamelCase $>->$file);
+            $<$ modelNameCamelCase $>->$file = null;
+            $<$ modelNameCamelCase $>->save();
+            return response()->json(['success' => __('File removed')]);
+        } else {
+            return response()->json(['error' => __('Invalid file type or file not found')], 400);
+        }
+    }
+
+    private function handleFiles($request, $<$ modelNameCamelCase $>, $validated, array $fileFields)
+    {
+        foreach ($fileFields as $file) {
+            if ($request->hasFile($file)) {
+                if ($<$ modelNameCamelCase $>->$file) {
+                    Storage::disk('public')->delete($<$ modelNameCamelCase $>->$file);
+                }
+                $validated[$file] = $request->file($file)->store('<$ modelNameCamelCase $>', 'public');
+            }
+        }
+
+        return $validated;
     }
 }

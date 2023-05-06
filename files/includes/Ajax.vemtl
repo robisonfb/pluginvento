@@ -1,65 +1,231 @@
 @if (! empty($AjaxModal))
 $('#Create_{{$AjaxModal['modelAjax']}}').click(function () {
     $('#Form_{{$AjaxModal['modelAjax']}} .id').val('');
+    $(".error").remove();
     $('#Form_{{$AjaxModal['modelAjax']}}').trigger("reset");
     $('#Form_{{$AjaxModal['modelAjax']}} select').val('').trigger('change');
     $('#Modal_{{$AjaxModal['modelAjax']}} .modal-title').html("{{__("Create New")}} {{$AjaxModal['modelAjax']}}");
     $('#Modal_{{$AjaxModal['modelAjax']}}').modal('show');
+
+    $('#Modal_{{$AjaxModal['modelAjax']}} .btn_remove_file').attr("hidden", true);
+    $('#Modal_{{$AjaxModal['modelAjax']}} input[type="file"]').attr("required", true);
+    $('#Modal_{{$AjaxModal['modelAjax']}} .download_file').attr("hidden", true);
+    $('#Modal_{{$AjaxModal['modelAjax']}} .dropzone-text').show();
+    $('#Modal_{{$AjaxModal['modelAjax']}} .preview_file').html('');
+    $('#Modal_{{$AjaxModal['modelAjax']}} .download_file').attr('href', "");
+    $('#Modal_{{$AjaxModal['modelAjax']}} .btn_remove_file').data("id", "").data("file", "");
 });
 
 $('body').on('click', '.edit{{$AjaxModal['modelAjax']}}', function () {
     var id = $(this).data('id');
-    $.get("{{ route($AjaxModal['routeAjax'] . '.index')}}" +'/' + id +'/edit', function (data) {
-        $('#Modal_{{$AjaxModal['modelAjax']}} .modal-title').html("{{__("Edit")}} {{$AjaxModal['modelAjax']}}");
-        $('#Modal_{{$AjaxModal['modelAjax']}}').modal('show');
-
-
-        $.each (data, function (index, item) {
-
-            var type = $('#Modal_{{$AjaxModal['modelAjax']}} .' + index).prop("tagName")
-            if( type == "INPUT"){
-                $('#Modal_{{$AjaxModal['modelAjax']}} .' + index).val(item);
+    $(".error").remove();
+    $.get("{{ route($AjaxModal['routeAjax'] . '.index')}}" +'/' + id +'/edit')
+        .done(function(data) {
+            $('#Modal_{{$AjaxModal['modelAjax']}} .modal-title').html("{{__("Edit")}} {{$AjaxModal['modelAjax']}}");
+            $('#Modal_{{$AjaxModal['modelAjax']}}').modal('show');
+            const  idfile = data.id;
+            $.each(data, function(index, item) {
+                var type = $('#Modal_{{$AjaxModal['modelAjax']}} .' + index).prop("tagName")
+                if (type == "INPUT") {
+                    if ($('#Modal_{{$AjaxModal['modelAjax']}} .' + index).attr("type") == "text") {
+                        $('#Modal_{{$AjaxModal['modelAjax']}} .' + index).val(item);
+                    } else if ($('#Modal_{{$AjaxModal['modelAjax']}} .' + index).attr("type") == "file") {
+                        if (item){
+                            $('.info_'+index+' .btn_remove_file').removeAttr("hidden").show();
+                            $('.info_'+index+' input[type="file"]').removeAttr("required");
+                            $('.info_'+index+' .download_file').removeAttr("hidden").show();
+                            $('.info_'+index+' .dropzone-text').hide();
+                            $('.info_'+index+' .preview_file').html('<img src="'+ item + '">');
+                            $('.info_'+index+' .download_file').attr('href', item);
+                            $('.info_'+index+' .btn_remove_file').data("id", idfile).data("file", index);
+                        }
+                    } else if ($('#Modal_{{$AjaxModal['modelAjax']}} .' + index).attr("type") == "hidden"){
+                        $('#Modal_{{$AjaxModal['modelAjax']}} .' + index).val(item);
+                    }
+                }
+                if (type == "TEXTAREA"){
+                    $('#Modal_{{$AjaxModal['modelAjax']}} .' + index).val(item);
+                }
+                if (type == "SELECT"){
+                    $('#Form_{{$AjaxModal['modelAjax']}} .' + index).val(item).trigger('change');
+                }
+            });
+        })
+        .fail(function(jqXHR, textStatus, errorThrown) {
+            if (jqXHR.responseJSON && jqXHR.responseJSON.message === "Unauthenticated.") {
+                $.notify({
+                    title: "<strong>{{__('Authenticated')}}</strong>",
+                    message: "{{__('You are not authenticated. Please login again.')}}",
+                },{
+                    type: 'danger',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    },
+                    animate: {
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutUp'
+                    },
+                    delay: 2000,
+                });
+            } else {
+                $.notify({
+                    title: "<strong>{{__('Error')}}</strong>",
+                    message: "{{__('An error has occurred. Please try again later.')}}",
+                },{
+                    type: 'danger',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    },
+                    animate: {
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutUp'
+                    },
+                    delay: 2000,
+                });
             }
-
-            if (type == "TEXTAREA"){
-                $('#Modal_{{$AjaxModal['modelAjax']}} .' + index).val(item);
-            }
-
-            if (type == "SELECT"){
-                $('#Form_{{$AjaxModal['modelAjax']}} .' + index).val(item).trigger('change');
-            }
-
-        });
-    })
+    });
 });
 
 $('#Save{{$AjaxModal['modelAjax']}}').click(function (e) {
+    $(".error").remove();
     e.preventDefault();
-    $('#Save{{$AjaxModal['modelAjax']}}').html('<i class="mr-1 glyph-icon simple-icon-hourglass"></i> {{__('Sending')}}');
+
+    var formData = new FormData($('#Form_{{$AjaxModal['modelAjax']}}')[0]);
 
     $.ajax({
-        data: $('#Form_{{$AjaxModal['modelAjax']}}').serialize(),
+        data: formData,
         url: "{{ route($AjaxModal['routeAjax'] . '.store')}}",
         type: "POST",
         dataType: 'json',
+        contentType: false,
+        processData: false,
         success: function (data) {
+            $.notify({
+                title: "<strong>{{__('Success')}}</strong>",
+                message: data.success,
+            },{
+                type: 'success',
+                placement: {
+                    from: "bottom",
+                    align: "right"
+                },
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+                delay: 2000,
+            });
+
             $('#Form_{{$AjaxModal['modelAjax']}}').trigger("reset");
             $('#Modal_{{$AjaxModal['modelAjax']}}').modal('hide');
             $dataTable{{$AjaxModal['modelAjax']}}.draw();
-            $('#Save{{$AjaxModal['modelAjax']}}').html('<i class="mr-1 glyph-icon iconsminds-disk"></i> {{__('Save')}}');
-            showNotification('<strong>Update</strong>', 'Save Changes.', 'success"')
-            
 
+            $('#Modal_{{$AjaxModal['modelAjax']}} .info').html('')
         },
         error: function (data) {
-            console.log('Error:', data);
+            if (data.responseJSON.errors) {
+                let values = data.responseJSON.errors
+                $.each (values, function (index, item) {
+                    $('.info_' + index).append('<div class="error">' + item[0] + '</div>');
+                });
+            } else if (data.responseJSON.error) {
+                $.notify({
+                    title: "<strong>{{__('Error')}}</strong>",
+                    message: data.responseJSON.error,
+                },{
+                    type: 'danger',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    },
+                    animate: {
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutUp'
+                    },
+                    delay: 2000,
+                });
+            }
+        },
+        complete: function() {
             $('#Save{{$AjaxModal['modelAjax']}}').html('<i class="mr-1 glyph-icon iconsminds-disk"></i> {{__('Save')}}');
+        },
+        statusCode: {
+            404: function() {
+                $.notify({
+                    title: "<strong>{{__('404')}}</strong>",
+                    message: "{{__('Page not found')}}",
+                },{
+                    type: 'danger',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    },
+                    animate: {
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutUp'
+                    },
+                    delay: 20000,
+                });
+            },
+            500: function() {
+                $.notify({
+                    title: "<strong>{{__('500')}}</strong>",
+                    message: "{{__('Internal server error')}}",
+                },{
+                    type: 'danger',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    },
+                    animate: {
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutUp'
+                    },
+                    delay: 20000,
+                });
+            },
+            401:function() {
+                $.notify({
+                    title: "<strong>{{__('401')}}</strong>",
+                    message: "{{__('Unauthenticated')}}",
+                },{
+                    type: 'danger',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    },
+                    animate: {
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutUp'
+                    },
+                    delay: 20000,
+                });
+            },
+            419:function() {
+                $.notify({
+                    title: "<strong>{{__('419')}}</strong>",
+                    message: "{{__('Unauthenticated')}}",
+                },{
+                    type: 'danger',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    },
+                    animate: {
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutUp'
+                    },
+                    delay: 20000,
+                });
+            }
         }
     });
 });
 
-$('body').on('click', '.delete{{$AjaxModal['modelAjax']}}', function () {
 
+$('body').on('click', '.delete{{$AjaxModal['modelAjax']}}', function () {
     var id = $(this).data("id");
     if (confirm("Are You sure want to delete this Post!") == true) {
         $.ajax({
@@ -67,14 +233,116 @@ $('body').on('click', '.delete{{$AjaxModal['modelAjax']}}', function () {
             url: "{{ route($AjaxModal['routeAjax'] . '.store')}}"+'/'+id,
             success: function (data) {
                 $dataTable{{$AjaxModal['modelAjax']}}.draw();
-                showNotification('<strong>Update</strong>', 'Deleted.', 'warning"')
+                $.notify({
+                    title: "<strong>{{__('Success')}}</strong>",
+                    message: data.success,
+                },{
+                    type: 'success',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    },
+                    animate: {
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutUp'
+                    },
+                    delay: 2000,
+                });
             },
-            error: function (data) {
-                console.log('Error:', data);
+            error: function (jqXHR, textStatus, errorThrown) {
+                const errorMessage = jqXHR.responseJSON
+                ? jqXHR.responseJSON.message
+                : errorThrown;
+                $.notify({
+                    title: "<strong>{{__('Error')}} </strong>" + textStatus,
+                    message: errorMessage,
+                },{
+                    type: 'danger',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    },
+                    animate: {
+                        enter: 'animated fadeInDown',
+                        exit: 'animated fadeOutUp'
+                    },
+                    delay: 20000,
+                });
+            },
+            statusCode: {
+                404: function() {
+                    $.notify({
+                        title: "<strong>{{__('404')}}</strong>",
+                        message: "{{__('Page not found')}}",
+                    },{
+                        type: 'danger',
+                        placement: {
+                            from: "bottom",
+                            align: "right"
+                        },
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        delay: 20000,
+                    });
+                },
+                500: function() {
+                    $.notify({
+                        title: "<strong>{{__('500')}}</strong>",
+                        message: "{{__('Internal server error')}}",
+                    },{
+                        type: 'danger',
+                        placement: {
+                            from: "bottom",
+                            align: "right"
+                        },
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        delay: 20000,
+                    });
+                },
+                401:function() {
+                    $.notify({
+                        title: "<strong>{{__('401')}}</strong>",
+                        message: "{{__('Unauthenticated')}}",
+                    },{
+                        type: 'danger',
+                        placement: {
+                            from: "bottom",
+                            align: "right"
+                        },
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        delay: 20000,
+                    });
+                },
+                419:function() {
+                    $.notify({
+                        title: "<strong>{{__('419')}}</strong>",
+                        message: "{{__('Unauthenticated')}}",
+                    },{
+                        type: 'danger',
+                        placement: {
+                            from: "bottom",
+                            align: "right"
+                        },
+                        animate: {
+                            enter: 'animated fadeInDown',
+                            exit: 'animated fadeOutUp'
+                        },
+                        delay: 20000,
+                    });
+                }
             }
         });
     }
 });
+
 
 $("#dataTablesCopy").on("click", function (event) {
     event.preventDefault();
@@ -104,4 +372,154 @@ $("#pageCountDatatable .dropdown-menu a").on("click", function (event) {
     var selText = $(this).text();
     $dataTable{{$AjaxModal['modelAjax']}}.page.len(parseInt(selText)).draw();
 });
+
+$(".dropzone").on("click", function (e) {
+    if (!$(e.target).is("input[type='file']") && !$(e.target).is(".btn_remove_file") && !$(e.target).is(".download_file")) {
+        $(this).find("input[type='file']").click();
+    }
+});
+
+
+$(".dropzone").on("dragover", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $(this).addClass("dragging");
+});
+
+$(".dropzone").on("dragleave", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $(this).removeClass("dragging");
+});
+
+$(".dropzone").on("drop", function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $(this).removeClass("dragging");
+
+    const files = e.originalEvent.dataTransfer.files;
+    const input = $(this).find("input[type='file']");
+    input.prop("files", files);
+
+    showPreview($(this), files[0]);
+});
+
+$("input[type='file']").on("change", function (e) {
+    const files = e.target.files;
+    showPreview($(this).closest(".dropzone"), files[0]);
+});
+
+$(".btn_remove_file").on("click", function (e) {
+    e.preventDefault();
+    const dropzone = $(this).closest(".dropzone");
+
+    const id = $(this).data("id");
+    const file = $(this).data("file");
+
+    dropzone.find(".preview_file").empty();
+    dropzone.find("input[type='file']").val(null);
+    dropzone.find(".btn_remove_file").hide();
+    dropzone.find(".download_file").hide();
+    dropzone.find(".dropzone-text").show();
+
+    if (id == "" || file == "") {
+        return;
+    }
+
+    const routeUrl = "{{ route($AjaxModal['routeAjax'] . '.removeFile', ['discord' => '__ID__', 'file' => '__FILE__']) }}";
+    const url = routeUrl.replace('__ID__', id).replace('__FILE__', file);
+
+    $.ajax({
+        url: url,
+        type: "DELETE",
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")
+        },
+        success: function () {
+            dropzone.find(".btn_remove_file").data("id", "").data("file", "");
+            $.notify({
+                title: "<strong>{{__('Success')}}</strong>",
+                message: "{{__('File removed successfully.')}}",
+            },{
+                type: 'success',
+                placement: {
+                    from: "bottom",
+                    align: "right"
+                },
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+                delay: 2000,
+            });
+            $dataTable{{$AjaxModal['modelAjax']}}.draw();
+        },
+        error: function (data) {
+            $.notify({
+                title: "<strong>{{__('Error')}} </strong>" + data.status,
+                message: data.statusText,
+            },{
+                type: 'danger',
+                placement: {
+                    from: "bottom",
+                    align: "right"
+                },
+                animate: {
+                    enter: 'animated fadeInDown',
+                    exit: 'animated fadeOutUp'
+                },
+                delay: 2000,
+            });
+        }
+    });
+});
+
+function getFileIcon(fileType) {
+    switch (fileType) {
+        case "application/pdf":
+            return "📄";
+        case "application/msword":
+        case "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+            return "📝";
+        case "application/vnd.ms-excel":
+        case "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+            return "📊";
+        case "application/vnd.ms-powerpoint":
+        case "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+            return "📽️";
+        case "text/plain":
+            return "📄";
+        case "application/zip":
+        case "application/x-rar-compressed":
+        case "application/gzip":
+            return "📦";
+        default:
+            return "📎";
+    }
+}
+
+function showPreview(dropzone, file) {
+    const preview = dropzone.find(".preview_file");
+    const reader = new FileReader();
+
+    reader.onload = function (e) {
+        let content = null;
+
+        if (file.type.startsWith("image/")) {
+            content = $("<img>").attr("src", e.target.result);
+        } else {
+            const icon = getFileIcon(file.type);
+            content = $("<div>").html(`<i>${icon}</i><p>${file.name}</p>`);
+        }
+
+        preview.html(content);
+        dropzone.find(".download_file").attr('href', e.target.result);
+    };
+
+    reader.readAsDataURL(file);
+
+    dropzone.find(".btn_remove_file").removeAttr("hidden").show();
+    dropzone.find(".download_file").removeAttr("hidden").show();
+    dropzone.find(".dropzone-text").hide();
+}
 @endif

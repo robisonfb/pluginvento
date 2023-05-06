@@ -15,7 +15,3 @@
     {{ $attributes->merge(['class' => 'form-control select2-single']) }}
     autocomplete="off"
 >{{ $slot }}</select>
-
-@error($name)
-    @include('components.inputs.partials.error')
-@enderror

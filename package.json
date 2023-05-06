@@ -8,6 +8,7 @@
     "main": "src/main.js",
     "vueComponent": "dist/admin-lte.umd.min.js",
     "dependencies": {
+        "laravel-datatable": "^0.0.5",
         "vue-template-compiler": "^2.7.14"
     }
 }

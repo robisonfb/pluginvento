@@ -88,22 +88,43 @@ module.exports = (vemto) => {
             vemto.renderTemplate('/files/includes/Ajax.vemtl', '/resources/views/layouts/ajax.blade.php')
 
             
-            vemto.renderTemplate('/files/LocalizationController.vemtl', 'App/Http/Controllers/LocalizationController.blade.php')
+            vemto.renderTemplate('/files/LocalizationController.vemtl', 'App/Http/Controllers/LocalizationController.php')
 
 
         },
         nodePackages(packages) {
 
             // Adding packages
+
+            // Dependencies
             packages.dependencies['lodash'] = '^4.17'
+            // packages.dependencies['datatables'] = '^1.10.18'
+            // packages.dependencies['simple-line-icons'] = '^2.5.5'
+            // packages.dependencies['flag-icons'] = 'github:lipis/flag-icon-css'
+
+
+            // devDependencies
+            // packages.devDependencies['@popperjs/core'] = '^4.17'
+            // packages.devDependencies['bootstrap'] = '^4.17'
+            // packages.devDependencies['jquery'] = '^3.6.4'
+            // packages.devDependencies['sass'] = '^4.17'
+            // packages.devDependencies['lodash'] = '^4.17'
+
 
             return packages
         },
+
+
         composerPackages(packages) {
             // Adding packages
-            packages.require['barryvdh/laravel-debugbar'] = '^3.8'
-            packages.require['yajra/laravel-datatables'] = '^10.0'
 
+            packages.require['barryvdh/laravel-debugbar'] = '^3.8'
+
+            // packages.require['yajra/laravel-datatables'] = '^10.0'
+            // packages.require['bootstrap-notify'] = '^3.1.3'
+            // packages.require['laravel/ui']
+            // vemto.executeCommand('php artisan ui bootstrap')
+            
             return packages
         },
 

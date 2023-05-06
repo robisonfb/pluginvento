@@ -27,7 +27,7 @@
     <% cssClass = "col-md-12" %>
 <% } %>
 <####>
-<x-inputs.group class="<$ cssClass $>">
+<x-inputs.group class="<$ cssClass $> info_<$ this.name $>">
     <x-inputs.number 
         name="<$ this.name $>" 
         class="<$ this.name $>" 

@@ -28,7 +28,7 @@
 <% } %>
 <####>
 
-<x-inputs.group class="<$ cssClass $>">
+<x-inputs.group class="<$ cssClass $> info_<$ this.name $>">
     <x-inputs.text 
         name="<$ this.name $>" 
         label="{{__('<$ this.label $>')}}" 

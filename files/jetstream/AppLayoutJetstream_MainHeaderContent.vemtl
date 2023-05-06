@@ -6,7 +6,8 @@
 
 <link rel="stylesheet" href="{{ asset('/font/iconsmind-s/css/iconsminds.css')}}" />
 <link rel="stylesheet" href="{{ asset('/font/simple-line-icons/css/simple-line-icons.css')}}" />
-<link rel="stylesheet" href="{{ asset('/font/flag-icon-css/css/flag-icon.min.css') }}">
+<link rel="stylesheet" href="{{ asset('/font/flag-icons/css/flag-icons.min.css') }}">
+
 
 <link rel="stylesheet" href="{{ asset('/css/vendor/dataTables.bootstrap4.min.css')}}" />
 <link rel="stylesheet" href="{{ asset('/css/vendor/datatables.responsive.bootstrap4.min.css')}}" />

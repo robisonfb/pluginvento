@@ -28,7 +28,7 @@
 <% } %>
 <####>
 
-<x-inputs.group class="<$ cssClass $>">
+<x-inputs.group class="<$ cssClass $> info_<$ this.name $>">
     <x-inputs.date 
         name="<$ this.name $>" 
         class="<$ this.name $>" 

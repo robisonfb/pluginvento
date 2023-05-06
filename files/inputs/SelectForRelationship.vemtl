@@ -32,26 +32,15 @@
 <% } %>
 <####>
 
-<x-inputs.group class="<$ cssClass $>">
+<x-inputs.group class="<$ cssClass $> info_<$ this.name $>">
     <x-inputs.select 
-        name="<$ this.livewireInputReference || this.name $>" 
-        label="{{__('<$ this.label $>')}}" 
-        class="{{__('<$ this.label $>')}}" 
-        <% if(isForLivewire) { %>
-        wire:model="<$ this.livewireInputReference $>"
-        <% } %>
-        <% if(!this.crud.isForLivewire) { %>
-        <$ this.getRequiredAttributeForTemplate() $>
-        <% } %>
-    >
-        <% if(!isForLivewire) { %>
-        @php $selected = old('<$ this.name $>', ($editing ? $<$ this.crud.model.name.case('camelCase') $>-><$ this.name $> : '<$ this.defaultValue $>')) @endphp
-        <option disabled {{ empty($selected) ? 'selected' : '' }}><$ this.starterOptionText ? this.starterOptionText : starterOptionLabel $></option>
-        <% } else { %>
-        <option value="null" disabled><$ this.starterOptionText ? this.starterOptionText : starterOptionLabel $></option>
-        <% } %>
+        name="<$ this.name $>" 
+        class="<$ this.name $>" 
+        label="{{__('<$ this.label $>')}}">
+
+        <option value="null"><$ this.starterOptionText ? this.starterOptionText : starterOptionLabel $></option>
         @foreach($<$ this.getVariableForRelationshipSelect() $> as $value => $label)
-        <option value="{{ $value }}" <% if(!isForLivewire) { %>{{ $selected == $value ? 'selected' : '' }}<% } %> >{{ $label }}</option>
+        <option value="{{ $value }}" >{{ $label }}</option>
         @endforeach
     </x-inputs.select>
 </x-inputs.group>
