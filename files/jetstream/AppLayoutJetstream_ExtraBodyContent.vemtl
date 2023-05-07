@@ -10,6 +10,7 @@
 <script src="https://cdn.datatables.net/buttons/1.5.1/js/buttons.print.min.js"></script>
 <script src="{{ asset('/js/vendor/bootstrap-notify.min.js')}}"></script>
 <script src="{{ asset('/js/vendor/mousetrap.min.js')}}"></script>
+<script src="{{ asset('/js/vendor/glide.min.js')}}"></script>
 <script src="{{ asset('/js/vendor/select2.full.js')}}"></script>
 <script src="{{ asset('/js/dore.script.js')}}"></script>
 <script src="{{ asset('/js/scripts.js')}}"></script>

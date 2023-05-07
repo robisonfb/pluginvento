@@ -1,0 +1,60 @@
+<x-guest-layout :title="' - ' . __('Register')">
+    <div class="card auth-card">
+        <div class="position-relative image-side ">
+
+            <p class=" text-white h2">{{ __('MAGIC IS IN THE DETAILS') }}</p>
+
+            <p class="white mb-0">
+                {{ __('Please use this form to register.') }}
+                @if (Route::has('register'))
+                    <br>{{ __('If you are not a member, please') }}
+                    <a href="{{ route('login') }}" class="white">{{ __('Login') }}</a>
+                @endif
+            </p>
+        </div>
+        <div class="form-side">
+            <a href="{{ url('/') }}">
+                <span class="logo-single"></span>
+            </a>
+            <h6 class="mb-4">{{ __('Register') }}</h6>
+                @if ($errors->any())
+                    <div>
+                        <div class="font-weight-bold text-danger">{{ __('Whoops! Something went wrong.') }}</div>
+                        <ul class="mt-3 list-disc list-inside text-sm text-danger">
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+                <form method="POST" action="{{ route('register') }}">
+                    @csrf
+                    <label class="form-group has-float-label mb-4" for="name">
+                        <input class="form-control" type="text" name="name" value="{{old('name')}}" required autofocus/>
+                        <span>{{ __('Name') }}</span>
+                    </label>
+
+                    <label class="form-group has-float-label mb-4" for="email">
+                        <input class="form-control" type="email" name="email" value="{{old('email')}}" required />
+                        <span>{{ __('Email') }}</span>
+                    </label>
+
+                    <label class="form-group has-float-label mb-4" for="password">
+                        <input class="form-control" type="password" name="password"  required/>
+                        <span>{{ __('Password') }}</span>
+                    </label>
+
+                    <label class="form-group has-float-label mb-4" for="password_confirmation">
+                        <input class="form-control" type="password_confirmation" name="password_confirmation"  required/>
+                        <span>{{ __('Confirm Password') }}</span>
+                    </label>
+
+                    <div class="d-flex justify-content-between align-items-center">
+                        <a href="{{ route('login') }}"> {{ __('Already registered?') }} </a>
+                        <button class="btn btn-primary btn-lg btn-shadow" type="submit">{{ __('Register') }}</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</x-guest-layout>

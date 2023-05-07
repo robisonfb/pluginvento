@@ -12,6 +12,5 @@
 
         <import template="AppLayoutJetstream_ExtraBodyContent">
 
-        <import template="AlpineImageViewerComponent">
     </body>
 </html>

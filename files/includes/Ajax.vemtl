@@ -409,6 +409,8 @@ $("input[type='file']").on("change", function (e) {
     showPreview($(this).closest(".dropzone"), files[0]);
 });
 
+
+
 $(".btn_remove_file").on("click", function (e) {
     e.preventDefault();
     const dropzone = $(this).closest(".dropzone");
@@ -426,11 +428,8 @@ $(".btn_remove_file").on("click", function (e) {
         return;
     }
 
-    const routeUrl = "{{ route($AjaxModal['routeAjax'] . '.removeFile', ['discord' => '__ID__', 'file' => '__FILE__']) }}";
-    const url = routeUrl.replace('__ID__', id).replace('__FILE__', file);
-
     $.ajax({
-        url: url,
+        url: "{{ route($AjaxModal['routeAjax'] . '.index')}}"+'/'+id+'/remove-file/'+file,
         type: "DELETE",
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content")

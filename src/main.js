@@ -58,8 +58,15 @@ module.exports = (vemto) => {
             vemto.renderTemplate('/files/includes/navigation-top.vemtl', '/resources/views/layouts/navigation-top.blade.php')
             vemto.renderTemplate(`/files/includes/breadcrumbs.vemtl`, '/resources/views/layouts/breadcrumbs.blade.php')
             vemto.renderTemplate('/files/includes/nav-link.vemtl', '/resources/views/components/nav-link.blade.php')
-
+            
+            vemto.log.message('Auth ...')
+            vemto.renderTemplate('/files/includes/auth/forgot-password.vemtl', '/resources/views/auth/register.blade.php')
+            vemto.renderTemplate('/files/includes/auth/login.vemtl', '/resources/views/auth/login.php')
+            vemto.renderTemplate('/files/includes/auth/register.vemtl', '/resources/views/auth/register.php')
+            
+            
             vemto.log.message('Pages ...')
+
             vemto.renderTemplate('/files/dashboard.vemtl', '/resources/views/dashboard.blade.php')
 
             vemto.log.message('Replace components ...')

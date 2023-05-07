@@ -136,13 +136,13 @@ class <$ this.crud.getControllerName() $> extends Controller
             $validated = $request->validated();
 
             <# Checking for CRUD file inputs #>
-            <% if(this.crud.hasFileOrImageInputs()) { %>
-                $fileFields = [
-                <% for(let input of this.crud.getFileAndImageInputs()) { %>
-                    '<$ input.name $>',
-                <% } %>
-                ];
+
+            $fileFields = [
+            <% for(let input of this.crud.getFileAndImageInputs()) { %>
+                '<$ input.name $>',
             <% } %>
+            ];
+
             
 
             <% if(hasPermissions) { %>
@@ -150,7 +150,7 @@ class <$ this.crud.getControllerName() $> extends Controller
             <% } %>
             
             if ($request->input('id') === null) {
-                $discord = new <$ this.model.name $>();
+                $<$ modelNameCamelCase $> = new <$ this.model.name $>();
                 $this->authorize('create', $<$ modelNameCamelCase $>);
                 <# --- #>
                 <# Checking for CRUD password inputs #>
