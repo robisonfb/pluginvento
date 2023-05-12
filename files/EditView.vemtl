@@ -4,14 +4,15 @@
 <% let modelNameCamelCase = this.model.name.case('camelCase') %>
 <% let crudNameSnakeCase = this.crud.name.case('snakeCase') %>
 <####>
-<x-app-layout :title="' - {{__('Create <$ modelPluralParamCase $>')}}'">
+<x-app-layout :title="{{ __('crud.<$ this.crud.name.case('snakeCase') $>.create_title') }}">
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">    
                 <h1>{{__('<$ crudNameSnakeCase $>')}}</h1>
                 @include('layouts.breadcrumbs', ['breadcrumbs' => [
                     '<$ crudNameSnakeCase $>' => route('<$ modelPluralParamCase $>.index'),
-                    __('Create <$ modelPluralParamCase $>'),
+                    __('crud.<$ crudNameSnakeCase $>.create_title'),
                 ]])
                 <div class="separator mb-5"></div>  
             </div>
@@ -26,18 +27,18 @@
                             <div class="btn-group" role="group" aria-label="action">
                                 <a href="{{ route('<$ modelPluralParamCase $>.index')}}">
                                     <button type="button" class="btn  btn-primary">
-                                        <i class="mr-1 glyph-icon iconsminds-left-1"></i> {{__('Back')}}
+                                        <i class="mr-1 glyph-icon iconsminds-left-1"></i> {{__('crud.back')}}
                                     </button>
                                 </a>
                                 <a href="{{ route('<$ modelPluralParamCase $>.create')}}">
                                     <button type="button" class="btn  btn-primary">
-                                        <i class="mr-1 glyph-icon iconsminds-add"></i> {{__('Create')}}
+                                        <i class="mr-1 glyph-icon iconsminds-add"></i> {{__('crud.create')}}
                                     </button>
                                 </a>
                             </div>
 
                             <button type="submit" class="btn btn-primary float-right">
-                                <i class="mr-1 glyph-icon iconsminds-disk"></i> {{__('Update')}}
+                                <i class="mr-1 glyph-icon iconsminds-disk"></i> {{__('crud.update')}}
                             </button>
                         </div>
                     </x-form>

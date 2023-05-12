@@ -7,7 +7,7 @@
 <% let modelPluralSentenceCase = this.model.plural.case('sentenceCase') %>
 <####>
 <####>
-<x-app-layout :title="' - ' . __('<$ modelPluralSentenceCase $>')">
+<x-app-layout :title="{{ __('crud.<$ this.crud.name.case('snakeCase') $>.index_title') }}">
 <div class="container-fluid">
     <import template="IndexView_Searchbar">
 

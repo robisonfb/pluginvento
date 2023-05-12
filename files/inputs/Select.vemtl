@@ -32,7 +32,7 @@
     <x-inputs.select 
     name="<$ this.name $>" 
     class="<$ this.name $>" 
-    label="{{__('<$ this.label $>')}}">
+    label="{{__('crud.<$ this.crud.model.table $>.inputs.<$ this.name $>')}}">
         <% for(let item of this.items) { %>
         <option value="<$ item.value $>"><$ item.label $></option>
         <% } %>

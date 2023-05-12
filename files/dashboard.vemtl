@@ -1,4 +1,4 @@
-<x-app-layout :title="' - {{__('Dashboard')}}'">
+<x-app-layout :title="{{__('Dashboard')}}">
     <div class="row">
         <div class="col-12">
             <h1>{{ __('Dashboard') }}</h1>

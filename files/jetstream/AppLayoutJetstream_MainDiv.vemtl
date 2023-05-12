@@ -13,13 +13,13 @@
                 <div class="col-sm-6 d-none d-sm-block">
                     <ul class="breadcrumb pt-0 pr-0 float-right">
                         <li class="breadcrumb-item mb-0">
-                            <a href="#" class="btn-link">{{__('Review')}}</a>
+                            <a href="#" class="btn-link">{{__('crud.review')}}</a>
                         </li>
                         <li class="breadcrumb-item mb-0">
-                            <a href="#" class="btn-link">{{__('Purchase')}}</a>
+                            <a href="#" class="btn-link">{{__('crud.purchase')}}</a>
                         </li>
                         <li class="breadcrumb-item mb-0">
-                            <a href="#" class="btn-link">{{__('Docs')}}</a>
+                            <a href="#" class="btn-link">{{__('crud.docs')}}</a>
                         </li>
                     </ul>
                 </div>

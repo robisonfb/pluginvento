@@ -31,7 +31,7 @@
     <x-inputs.checkbox 
         name="<$ this.name $>" 
         class="<$ this.name $>" 
-        label="{{__('{{__('<$ this.label $>')}}')}}" 
+        label="{{ __('crud.<$ this.crud.model.table $>.inputs.<$ this.name $>') }}" 
         :checked="old('<$ this.name $>', '<$ this.defaultValue $>') ? true : false"
     ></x-inputs.checkbox>
 </x-inputs.group>

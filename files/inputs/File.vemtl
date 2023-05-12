@@ -28,14 +28,14 @@
 <% } %>
 <####>
 <x-inputs.group class="<$ cssClass $> info_<$ this.name $>">
-    <x-inputs.partials.label name="<$ this.name $>" label="{{__('<$ this.label $>')}}"></x-inputs.partials.label>
+    <x-inputs.partials.label name="<$ this.name $>" label="{{__('crud.<$ this.crud.model.table $>.inputs.<$ this.name $>')}}"></x-inputs.partials.label>
    
     <div class="dropzone">
         <input type="file" class="<$ this.name $>" name="<$ this.name $>" hidden <$ this.getRequiredAttributeForTemplate() $>>
         <div class="preview_file"></div>
-        <button type="button" class="btn_remove_file" data-id="" data-file="" hidden>{{__('Remove file')}}</button>
-        <a href="#" class="download_file" hidden download>{{__('Download file')}}</a>
-        <span class="dropzone-text">{{__('Drop files here to upload')}}</span>
+        <button type="button" class="btn_remove_file" data-id="" data-file="" hidden>{{__('crud.delete_file')}}</button>
+        <a href="#" class="download_file" hidden download>{{__('crud.download')}}</a>
+        <span class="dropzone-text">{{__('crud.drop_files')}}</span>
     </div>
 
 </x-inputs.group>

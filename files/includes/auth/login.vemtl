@@ -1,4 +1,4 @@
-<x-guest-layout :title="' - ' . __('Login')">
+<x-guest-layout :title="' - ' . __('crud.login')">
     <div class="card auth-card">
         <div class="position-relative image-side ">
 
@@ -8,7 +8,7 @@
                 {{ __('Please use your credentials to login.') }}
                 @if (Route::has('register'))
                     <br>{{ __('If you are not a member, please') }}
-                    <a href="{{ route('register') }}" class="white">{{ __('Register') }}</a>
+                    <a href="{{ route('register') }}" class="white">{{ __('crud.register') }}</a>
                 @endif
             </p>
         </div>

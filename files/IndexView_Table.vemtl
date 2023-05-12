@@ -7,10 +7,10 @@
                     <% for(let input of this.crud.inputs) { %>
                     <% if(input.isAllowedOnIndexPages() && input.onIndex) { %>
                     <% cols++ %>
-                    <th>{{__('<$ input.label || input.name.case('sentenceCase') $>')}}</th>
+                    <th>{{ __('crud.<$ crudNameSnakeCase $>.inputs.<$ input.name $>') }}</th>
                     <% } %>
                     <% } %>
-                    <th>{{__('Action')}}</th>
+                    <th>{{__('crud.actions')}}</th>
                 </tr>
             </thead>
             <tbody></tbody>
@@ -32,17 +32,16 @@
 @push('scripts')
 <x-modal  id="Modal_<$ this.model.name $>" maxWidth="lg">
     <x-slot name="title">
-        modal Initial
     </x-slot>
     <x-form method="POST" action="" id="Form_<$ this.model.name $>" enctype="multipart/form-data">
 
         <x-inputs.hidden name="id" class="id" ></x-inputs.hidden>
-        <div class="info"></div>
 
+        <div class="info"></div>
         @include('<$ this.project.viewsPath() $>.<$ modelPluralSnakeCase $>.form-inputs')
         <div class="modal-footer">
-            <button type="button" class="btn btn-outline-primary" data-dismiss="modal"><i class="mr-1 glyph-icon simple-icon-close"></i> {{__('Cancel')}}</button>
-            <button type="submit" class="btn btn-primary float-right" id="Save<$ this.model.name $>"><i class="mr-1 glyph-icon iconsminds-disk"></i>{{__('Save')}}</button>
+            <button type="button" class="btn btn-outline-primary" data-dismiss="modal"><i class="mr-1 glyph-icon simple-icon-close"></i> {{__('crud.cancel')}}</button>
+            <button type="submit" class="btn btn-primary float-right" id="Save<$ this.model.name $>"><i class="mr-1 glyph-icon iconsminds-disk"></i>{{__('crud.save')}}</button>
         </div>
     </x-form>
 </x-modal>
@@ -74,7 +73,14 @@ $(function () {
             <% for(let input of this.crud.inputs) { %>
             <% if(input.isAllowedOnIndexPages() && input.onIndex) { %>
             <% cols++ %>
-            {data: '<$ input.name $>', name: '<$ input.name $>'},
+            {
+                data: null,
+                render: function(data, type, row) {
+                return `
+                    ${row.<$ input.name $>}
+                `;
+                },
+            },
             <% } %>
             <% } %>
             {data: 'action', name: 'action', width: '100'},
@@ -93,7 +99,7 @@ $(function () {
                 .addClass("next");
             $(".dataTables_wrapper .pagination").addClass("pagination-sm");
             var api = $(this).dataTable().api();
-            $("#pageCountDatatable span").html("{{__('Displaying')}} " + parseInt(api.page.info().start + 1) + "-" + api.page.info().end + " {{__('of')}} " + api.page.info().recordsTotal + " {{__('items')}}");
+            $("#pageCountDatatable span").html("{{__('crud.displaying')}} " + parseInt(api.page.info().start + 1) + "-" + api.page.info().end + " {{__('crud.of')}} " + api.page.info().recordsTotal + " {{__('crud.items')}}");
         }
     });
     @include('layouts.ajax',['AjaxModal' => ['routeAjax' => "<$ modelPluralParamCase $>",'modelAjax' => "<$ this.model.name $>"]])

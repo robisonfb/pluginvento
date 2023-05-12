@@ -1,0 +1,106 @@
+<?php
+
+return [
+    'dashboard' => 'Dashboard',
+    'actions' => 'Actions',
+    'create' => 'Create',
+    'edit' => 'Edit',
+    'update' => 'Update',
+    'new' => 'New',
+    'cancel' => 'Cancel',
+    'attach' => 'Attach',
+    'detach' => 'Detach',
+    'save' => 'Save',
+    'delete' => 'Delete',
+    'delete_file' => 'Delete file',
+    'download' => 'Download',
+    'delete_selected' => 'Delete selected',
+    'search' => 'Search...',
+    'back' => 'Back to Index',
+    'are_you_sure' => 'Are you sure?',
+    'no_items_found' => 'No items found',
+    'created' => 'Successfully created',
+    'updated' => 'Successfully updated',
+    'saved' => 'Saved successfully',
+    'removed' => 'Successfully removed',
+    'file_removed' => 'File successfully removed',
+    'file_error' => 'Invalid file type or file not found',
+    'displaying' => 'Displaying',
+    'of' => 'of',
+    'items' => 'items',
+    'copy' => 'Copy',
+    'excel' => 'Excel',
+    'csv' => 'CSV',
+    'pdf' => 'PDF',
+    'export' => 'Export',
+    'display_options' => 'Display options',
+    'all' => 'All',
+    'review' => 'Review',
+    'purchase' => 'Purchase',
+    'docs' => 'Docs',
+    'unauthenticated' => 'Unauthenticated',
+    'authenticated' => 'Authenticated',
+    'authenticated_message' => 'You are not authenticated. Please login again.',
+    'success' => 'Success',
+    'drop_files' => 'Drop files here to upload',
+    
+    'login' => 'Login',
+    'register' => 'Register',
+
+    'internal_server_error' => 'Internal server error',
+    'error' => 'Error',
+    'page_not_found' => 'Page not found',
+    'error_has_occurred' => 'An error has occurred. Please try again later.',
+    'error_processing_request' => 'An error occurred while processing the request',
+
+    'Please use your credentials to login.' => 'Please use your credentials to login.',
+
+    <% for(let crud of this.project.cruds) { %>
+    <% let crudNewTitle = crud.titles.new ? crud.titles.new : 'New ' + crud.model.name.case('sentenceCase') %>
+    <% let crudUpdateTitle = crud.titles.new ? crud.titles.new : 'Update ' + crud.model.name.case('sentenceCase') %>
+
+    <###>
+    '<$ crud.name.case('snakeCase') $>.name' => '<$ crud.name $>',
+    '<$ crud.name.case('snakeCase') $>.index_title' => '<$ crud.titles.index $>',
+    '<$ crud.name.case('snakeCase') $>.new_title' => '<$ crudNewTitle $>',
+    '<$ crud.name.case('snakeCase') $>.create_title' => '<$ crud.titles.create $>',
+    '<$ crud.name.case('snakeCase') $>.edit_title' => '<$ crud.titles.edit $>',
+    '<$ crud.name.case('snakeCase') $>.show_title' => '<$ crud.titles.show $>',
+    '<$ crud.name.case('snakeCase') $>.update_title' => '<$ crudUpdateTitle $>',
+
+    <% for(let input of crud.inputs) { %>
+    '<$ crud.name.case('snakeCase') $>.inputs.<$ input.name $>' => '<$ input.label || input.name.case('sentenceCase') $>',
+    '<$ crud.name.case('snakeCase') $>.inputs.<$ input.name $>.placeholder' => '<$ input.placeholder.case('sentenceCase') $>',
+    <% } %>
+    
+    <% for(let component of crud.getBelongsToManyCheckboxGroups()) { %>
+        <% let relModel = component.relationship.model %>
+        <% let modelHasMainCrud = this.project.getMainCruds().find(crud => crud.model.id == relModel.id) %>
+        <###>
+        <% if(!modelHasMainCrud) { %>
+            <###>
+            '<$ relModel.plural.case('snakeCase') $>.name' => '<$ relModel.plural $>'
+        <% } %>
+    <% } %>
+
+    <% } %>
+
+    <% if(this.generatorSettings.modules.permissions) { %>
+    
+        'roles.name' => 'Roles',
+        'roles.index_title' => 'Roles List',
+        'roles.create_title' => 'Create Role',
+        'roles.edit_title' => 'Edit Role',
+        'roles.show_title' => 'Show Role',
+        'roles.inputs.name' => 'Name'
+
+        'permissions.name' => 'Permissions',
+        'permissions.index_title' => 'Permissions List',
+        'permissions.create_title' => 'Create Permission',
+        'permissions.edit_title' => 'Edit Permission',
+        'permissions.show_title' => 'Show Permission',
+        'permissions.inputs.name' => 'Name',
+
+    <% } %>
+
+];

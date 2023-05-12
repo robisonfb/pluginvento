@@ -11,8 +11,14 @@ module.exports = (vemto) => {
             let basePath = '/views/frameworks/tailwind'
             let InputPath = '/views/inputs/blade'
 
+            vemto.log.message('Controller ...')
             vemto.replaceTemplate(`/Controller.vemtl`, 'files/Controller.vemtl')
+
+            vemto.log.message('Routes ...')
             vemto.replaceTemplate(`/Routes.vemtl`, 'files/Routes.vemtl')
+
+            vemto.log.message('Lang ...')
+            vemto.replaceTemplate(`/CrudTranslations.vemtl`, 'files/lang/CrudTranslations.vemtl')
 
             vemto.log.message('Start replace Jetstream ...')
             vemto.replaceTemplate(`${basePath}/AppLayoutJetstream.vemtl`, 'files/jetstream/AppLayoutJetstream.vemtl')
@@ -45,6 +51,8 @@ module.exports = (vemto) => {
             vemto.replaceTemplate(`${InputPath}/Url.vemtl`, 'files/inputs/Url.vemtl')
             vemto.replaceTemplate(`${InputPath}/Text.vemtl`, 'files/inputs/Text.vemtl')
             vemto.replaceTemplate(`${InputPath}/Password.vemtl`, 'files/inputs/password.vemtl')
+
+
             
         },
 
@@ -61,8 +69,11 @@ module.exports = (vemto) => {
             
             vemto.log.message('Auth ...')
             vemto.renderTemplate('/files/includes/auth/forgot-password.vemtl', '/resources/views/auth/register.blade.php')
-            vemto.renderTemplate('/files/includes/auth/login.vemtl', '/resources/views/auth/login.php')
-            vemto.renderTemplate('/files/includes/auth/register.vemtl', '/resources/views/auth/register.php')
+            vemto.renderTemplate('/files/includes/auth/login.vemtl', '/resources/views/auth/login.blade.php')
+            vemto.renderTemplate('/files/includes/auth/register.vemtl', '/resources/views/auth/register.blade.php')
+
+
+            vemto.renderTemplate('/files/includes/guest.vemtl', '/resources/views/layouts/guest.blade.php')
             
             
             vemto.log.message('Pages ...')
@@ -126,9 +137,8 @@ module.exports = (vemto) => {
             // Adding packages
 
             packages.require['barryvdh/laravel-debugbar'] = '^3.8'
-
-            // packages.require['yajra/laravel-datatables'] = '^10.0'
-            // packages.require['bootstrap-notify'] = '^3.1.3'
+            packages.require['yajra/laravel-datatables'] = '^10.0'
+            packages.require['bootstrap-notify'] = '^3.1.3'
             // packages.require['laravel/ui']
             // vemto.executeCommand('php artisan ui bootstrap')
             

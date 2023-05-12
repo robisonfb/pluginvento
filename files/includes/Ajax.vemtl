@@ -54,8 +54,8 @@ $('body').on('click', '.edit{{$AjaxModal['modelAjax']}}', function () {
         .fail(function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.responseJSON && jqXHR.responseJSON.message === "Unauthenticated.") {
                 $.notify({
-                    title: "<strong>{{__('Authenticated')}}</strong>",
-                    message: "{{__('You are not authenticated. Please login again.')}}",
+                    title: "<strong>{{__('crud.authenticated')}}</strong>",
+                    message: "{{__('authenticated_message')}}",
                 },{
                     type: 'danger',
                     placement: {
@@ -70,8 +70,8 @@ $('body').on('click', '.edit{{$AjaxModal['modelAjax']}}', function () {
                 });
             } else {
                 $.notify({
-                    title: "<strong>{{__('Error')}}</strong>",
-                    message: "{{__('An error has occurred. Please try again later.')}}",
+                    title: "<strong>{{__('crud.error')}}</strong>",
+                    message: "{{__('crud.error_has_occurred')}}",
                 },{
                     type: 'danger',
                     placement: {
@@ -103,7 +103,7 @@ $('#Save{{$AjaxModal['modelAjax']}}').click(function (e) {
         processData: false,
         success: function (data) {
             $.notify({
-                title: "<strong>{{__('Success')}}</strong>",
+                title: "<strong>{{__('crud.success')}}</strong>",
                 message: data.success,
             },{
                 type: 'success',
@@ -132,7 +132,7 @@ $('#Save{{$AjaxModal['modelAjax']}}').click(function (e) {
                 });
             } else if (data.responseJSON.error) {
                 $.notify({
-                    title: "<strong>{{__('Error')}}</strong>",
+                    title: "<strong>{{__('crud.error')}}</strong>",
                     message: data.responseJSON.error,
                 },{
                     type: 'danger',
@@ -149,13 +149,13 @@ $('#Save{{$AjaxModal['modelAjax']}}').click(function (e) {
             }
         },
         complete: function() {
-            $('#Save{{$AjaxModal['modelAjax']}}').html('<i class="mr-1 glyph-icon iconsminds-disk"></i> {{__('Save')}}');
+            $('#Save{{$AjaxModal['modelAjax']}}').html('<i class="mr-1 glyph-icon iconsminds-disk"></i> {{__('crud.save')}}');
         },
         statusCode: {
             404: function() {
                 $.notify({
                     title: "<strong>{{__('404')}}</strong>",
-                    message: "{{__('Page not found')}}",
+                    message: "{{__('crud.page_not_found')}}",
                 },{
                     type: 'danger',
                     placement: {
@@ -172,7 +172,7 @@ $('#Save{{$AjaxModal['modelAjax']}}').click(function (e) {
             500: function() {
                 $.notify({
                     title: "<strong>{{__('500')}}</strong>",
-                    message: "{{__('Internal server error')}}",
+                    message: "{{__('crud.internal_server_error')}}",
                 },{
                     type: 'danger',
                     placement: {
@@ -189,7 +189,7 @@ $('#Save{{$AjaxModal['modelAjax']}}').click(function (e) {
             401:function() {
                 $.notify({
                     title: "<strong>{{__('401')}}</strong>",
-                    message: "{{__('Unauthenticated')}}",
+                    message: "{{__('crud.unauthenticated')}}",
                 },{
                     type: 'danger',
                     placement: {
@@ -206,7 +206,7 @@ $('#Save{{$AjaxModal['modelAjax']}}').click(function (e) {
             419:function() {
                 $.notify({
                     title: "<strong>{{__('419')}}</strong>",
-                    message: "{{__('Unauthenticated')}}",
+                    message: "{{__('crud.unauthenticated')}}",
                 },{
                     type: 'danger',
                     placement: {
@@ -234,7 +234,7 @@ $('body').on('click', '.delete{{$AjaxModal['modelAjax']}}', function () {
             success: function (data) {
                 $dataTable{{$AjaxModal['modelAjax']}}.draw();
                 $.notify({
-                    title: "<strong>{{__('Success')}}</strong>",
+                    title: "<strong>{{__('crud.success')}}</strong>",
                     message: data.success,
                 },{
                     type: 'success',
@@ -254,7 +254,7 @@ $('body').on('click', '.delete{{$AjaxModal['modelAjax']}}', function () {
                 ? jqXHR.responseJSON.message
                 : errorThrown;
                 $.notify({
-                    title: "<strong>{{__('Error')}} </strong>" + textStatus,
+                    title: "<strong>{{__('crud.error')}} </strong>" + textStatus,
                     message: errorMessage,
                 },{
                     type: 'danger',
@@ -273,7 +273,7 @@ $('body').on('click', '.delete{{$AjaxModal['modelAjax']}}', function () {
                 404: function() {
                     $.notify({
                         title: "<strong>{{__('404')}}</strong>",
-                        message: "{{__('Page not found')}}",
+                        message: "{{__('crud.page_not_found')}}",
                     },{
                         type: 'danger',
                         placement: {
@@ -290,7 +290,7 @@ $('body').on('click', '.delete{{$AjaxModal['modelAjax']}}', function () {
                 500: function() {
                     $.notify({
                         title: "<strong>{{__('500')}}</strong>",
-                        message: "{{__('Internal server error')}}",
+                        message: "{{__('crud.internal_server_error')}}",
                     },{
                         type: 'danger',
                         placement: {
@@ -307,7 +307,7 @@ $('body').on('click', '.delete{{$AjaxModal['modelAjax']}}', function () {
                 401:function() {
                     $.notify({
                         title: "<strong>{{__('401')}}</strong>",
-                        message: "{{__('Unauthenticated')}}",
+                        message: "{{__('crud.unauthenticated')}}",
                     },{
                         type: 'danger',
                         placement: {
@@ -324,7 +324,7 @@ $('body').on('click', '.delete{{$AjaxModal['modelAjax']}}', function () {
                 419:function() {
                     $.notify({
                         title: "<strong>{{__('419')}}</strong>",
-                        message: "{{__('Unauthenticated')}}",
+                        message: "{{__('crud.unauthenticated')}}",
                     },{
                         type: 'danger',
                         placement: {
@@ -437,8 +437,8 @@ $(".btn_remove_file").on("click", function (e) {
         success: function () {
             dropzone.find(".btn_remove_file").data("id", "").data("file", "");
             $.notify({
-                title: "<strong>{{__('Success')}}</strong>",
-                message: "{{__('File removed successfully.')}}",
+                title: "<strong>{{__('crud.success')}}</strong>",
+                message: "{{__('crud.file_removed')}}",
             },{
                 type: 'success',
                 placement: {
@@ -455,7 +455,7 @@ $(".btn_remove_file").on("click", function (e) {
         },
         error: function (data) {
             $.notify({
-                title: "<strong>{{__('Error')}} </strong>" + data.status,
+                title: "<strong>{{__('crud.error')}} </strong>" + data.status,
                 message: data.statusText,
             },{
                 type: 'danger',

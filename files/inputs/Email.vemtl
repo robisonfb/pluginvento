@@ -31,7 +31,7 @@
     <x-inputs.email 
         name="<$ this.name $>" 
         class="<$ this.name $>" 
-        label="{{__('<$ this.label $>')}}" 
+        label="{{ __('crud.<$ this.crud.model.table $>.inputs.<$ this.name $>') }}" 
         :value="old('<$ this.name $>', '<$ this.defaultValue $>')" 
         <$ this.min ? ` minlength="${this.min}"` : '' $>
         <$ this.max ? ` maxlength="${this.max}"` : '' $>

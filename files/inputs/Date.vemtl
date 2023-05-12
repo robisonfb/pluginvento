@@ -32,7 +32,7 @@
     <x-inputs.date 
         name="<$ this.name $>" 
         class="<$ this.name $>" 
-        label="{{__('<$ this.label $>')}}" 
+        label="{{ __('crud.<$ this.crud.model.table $>.inputs.<$ this.name $>') }}" 
         value="{{ old('<$ this.name $>', '<$ this.defaultValue $>')}}" 
         <$ this.min ? ` min="${this.min}"` : '' $>
         <$ this.max ? ` max="${this.max}"` : '' $>

@@ -36,7 +36,7 @@
     <x-inputs.select 
         name="<$ this.name $>" 
         class="<$ this.name $>" 
-        label="{{__('<$ this.label $>')}}">
+        label="{{__('crud.<$ this.crud.model.table $>.inputs.<$ this.name $>')}}">
 
         <option value="null"><$ this.starterOptionText ? this.starterOptionText : starterOptionLabel $></option>
         @foreach($<$ this.getVariableForRelationshipSelect() $> as $value => $label)

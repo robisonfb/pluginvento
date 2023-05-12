@@ -75,8 +75,8 @@ class <$ this.crud.getControllerName() $> extends Controller
             return Datatables::of($<$ modelNameCamelCase $>->latest()->get())
                 ->addIndexColumn()
                 ->addColumn('action', function ($row) {
-                    $editBtn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="' . __('Edit') . '" class="edit btn  pr-0 edit<$ this.model.name $>"><i class="glyph-icon simple-icon-note"></i></a>';
-                    $deleteBtn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="' . __('Delete') . '" class="btn  delete<$ this.model.name $>"><i class="glyph-icon simple-icon-trash"></i></a>';
+                    $editBtn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="' . __('crud.edit') . '" class="edit btn  pr-0 edit<$ this.model.name $>"><i class="glyph-icon simple-icon-note"></i></a>';
+                    $deleteBtn = '<a href="javascript:void(0)" data-toggle="tooltip"  data-id="' . $row->id . '" data-original-title="' . __('crud.delete') . '" class="btn  delete<$ this.model.name $>"><i class="glyph-icon simple-icon-trash"></i></a>';
                     return $editBtn . $deleteBtn;
                 })
                 ->rawColumns(['action'])
@@ -89,7 +89,6 @@ class <$ this.crud.getControllerName() $> extends Controller
                 <% let collectionName = input.getRelationshipCollectionName() %>
                 $<$ collectionName $> = <$ relModel.name $>::pluck('<$ relModel.getLabelFieldName() $>', '<$ relModel.getPkName() $>');
             <% } %>
-
         <% } %>
 
         <% if(hasPermissions) { %>
@@ -174,7 +173,7 @@ class <$ this.crud.getControllerName() $> extends Controller
                 );
 
                 $<$ modelNameCamelCase $>->create($validated);
-                $message = __('Record created');
+                $message = __('crud.created');
             } else {
                 $<$ modelNameCamelCase $> = <$ this.model.name $>::findOrFail($request->input('id'));
                 $this->authorize('update', $<$ modelNameCamelCase $>);
@@ -194,16 +193,16 @@ class <$ this.crud.getControllerName() $> extends Controller
                 <% } %>
                 $validated = $this->handleFiles($request, $<$ modelNameCamelCase $>, $validated, $fileFields);
                 $<$ modelNameCamelCase $>->update($validated);
-                $message = __('Updated record');
+                $message = __('crud.updated');
             }
 
             return response()->json(['success' => $message]);
         } catch (ModelNotFoundException $e) {
             $errorData = config('app.env') === 'local' ? $e : null;
-            return response()->json(['error' => __('Register not found'), 'data' => $errorData], 404);
+            return response()->json(['error' => __('crud.no_items_found'), 'data' => $errorData], 404);
         } catch (\Exception $e) {
             $errorData = config('app.env') === 'local' ? $e : null;
-            return response()->json(['error' => __('An error occurred while processing the request'), 'data' => $errorData], 500);
+            return response()->json(['error' => __('crud.error_processing_request'), 'data' => $errorData], 500);
         }
     }
 
@@ -226,10 +225,10 @@ class <$ this.crud.getControllerName() $> extends Controller
             return response()->json($<$ modelNameCamelCase $>);
         } catch (ModelNotFoundException $e) {
             $errorData = config('app.env') === 'local' ? $e : null;
-            return response()->json(['error' => __('Register not found'), 'data' => $errorData], 404);
+            return response()->json(['error' => __('crud.no_items_found'), 'data' => $errorData], 404);
         } catch (\Exception $e) {
             $errorData = config('app.env') === 'local' ? $e : null;
-            return response()->json(['error' => __('An error occurred while processing the request'), 'data' => $errorData], 500);
+            return response()->json(['error' => __('crud.error_processing_request'), 'data' => $errorData], 500);
         }
     }
 
@@ -250,7 +249,7 @@ class <$ this.crud.getControllerName() $> extends Controller
         <% } %>
         $<$ modelNameCamelCase $>->delete();
 
-        return response()->json(['success' => __('crud.common.removed')]);
+        return response()->json(['success' => __('crud.removed')]);
     }
 
     public function removeFile(Request $request, <$ this.model.name $> $<$ modelNameCamelCase $>, $file)
@@ -261,9 +260,9 @@ class <$ this.crud.getControllerName() $> extends Controller
             Storage::disk('public')->delete($<$ modelNameCamelCase $>->$file);
             $<$ modelNameCamelCase $>->$file = null;
             $<$ modelNameCamelCase $>->save();
-            return response()->json(['success' => __('File removed')]);
+            return response()->json(['success' => __('crud.file_removed')]);
         } else {
-            return response()->json(['error' => __('Invalid file type or file not found')], 400);
+            return response()->json(['error' => __('crud.file_error')], 400);
         }
     }
 
