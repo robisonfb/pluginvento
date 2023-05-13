@@ -52,6 +52,11 @@ return [
     'page_not_found' => 'Page not found',
     'error_has_occurred' => 'An error has occurred. Please try again later.',
     'error_processing_request' => 'An error occurred while processing the request',
+    'english' => 'English',
+    'german' => 'German',
+    'portuguese' => 'Portuguese',
+    'pages' => 'Pages',
+    'docs' => 'Docs',
 
     'Please use your credentials to login.' => 'Please use your credentials to login.',
 

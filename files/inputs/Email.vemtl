@@ -35,6 +35,6 @@
         :value="old('<$ this.name $>', '<$ this.defaultValue $>')" 
         <$ this.min ? ` minlength="${this.min}"` : '' $>
         <$ this.max ? ` maxlength="${this.max}"` : '' $>
-        <$ this.placeholder ? ` placeholder="{{__('${this.placeholder}')}}"` : '' $>
+        <$ this.placeholder ? ` placeholder="{{__('crud.${this.crud.model.table}.inputs.${this.name}.placeholder')}}"` : '' $>
     ></x-inputs.email>
 </x-inputs.group>

@@ -3,7 +3,7 @@
 <% let modelPluralParamCase = this.model.plural.case('paramCase') %>
 <% let crudNameSnakeCase = this.crud.name.case('snakeCase') %>
 <####>
-<x-app-layout :title="{{ __('crud.<$ this.crud.name.case('snakeCase') $>.update_title') }}">
+<x-app-layout :title="__('crud.<$ this.crud.name.case('snakeCase') $>.update_title')">
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">    

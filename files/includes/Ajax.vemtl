@@ -4,7 +4,7 @@ $('#Create_{{$AjaxModal['modelAjax']}}').click(function () {
     $(".error").remove();
     $('#Form_{{$AjaxModal['modelAjax']}}').trigger("reset");
     $('#Form_{{$AjaxModal['modelAjax']}} select').val('').trigger('change');
-    $('#Modal_{{$AjaxModal['modelAjax']}} .modal-title').html("{{__("Create New")}} {{$AjaxModal['modelAjax']}}");
+    $('#Modal_{{$AjaxModal['modelAjax']}} .modal-title').html("{{__("crud." . $AjaxModal['routeAjax'].".create_title")}}");
     $('#Modal_{{$AjaxModal['modelAjax']}}').modal('show');
 
     $('#Modal_{{$AjaxModal['modelAjax']}} .btn_remove_file').attr("hidden", true);
@@ -21,7 +21,7 @@ $('body').on('click', '.edit{{$AjaxModal['modelAjax']}}', function () {
     $(".error").remove();
     $.get("{{ route($AjaxModal['routeAjax'] . '.index')}}" +'/' + id +'/edit')
         .done(function(data) {
-            $('#Modal_{{$AjaxModal['modelAjax']}} .modal-title').html("{{__("Edit")}} {{$AjaxModal['modelAjax']}}");
+            $('#Modal_{{$AjaxModal['modelAjax']}} .modal-title').html("{{__("crud." . $AjaxModal['routeAjax'].".edit_title")}}");
             $('#Modal_{{$AjaxModal['modelAjax']}}').modal('show');
             const  idfile = data.id;
             $.each(data, function(index, item) {

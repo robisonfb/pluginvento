@@ -20,7 +20,7 @@
             </svg>
         </a>
         <div class="search" data-search-path="Pages.Search.html?q=">
-            <input placeholder="{{__('Search')}}">
+            <input placeholder="{{__('crud.search')}}">
             <span class="search-icon">
                 <i class="simple-icon-magnifier"></i>
             </span>
@@ -140,19 +140,19 @@
             <button class="btn btn-empty p-0" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 @switch($locale)
                     @case('de')
-                        <span class="name"><span class="fi fi-gr mr-1"></span>  {{ __('German') }}</span>
+                        <span class="name"><span class="fi fi-gr mr-1"></span>  {{ __('crud.german') }}</span>
                     @break
                     @case('pt')
-                        <span class="name"><span class="fi fi-br mr-1"></span>  {{ __('Portuguese') }}</span>
+                        <span class="name"><span class="fi fi-br mr-1"></span>  {{ __('crud.portuguese') }}</span>
                     @break
                     @default
-                        <span class="name"><span class="fi fi-us mr-1"></span>  {{ __('English') }}</span>
+                        <span class="name"><span class="fi fi-us mr-1"></span>  {{ __('crud.english') }}</span>
                 @endswitch
             </button>
             <div class="dropdown-menu dropdown-menu-right mt-3">
-                <a class="dropdown-item" href="{{ route('lang', 'en') }}"><span class="fi fi-us mr-1"></span> {{__('English')}}</a>
-                <a class="dropdown-item" href="{{ route('lang', 'de') }}"><span class="fi fi-de mr-1"></span> {{__('German')}}</a>
-                <a class="dropdown-item" href="{{ route('lang', 'pt') }}"><span class="fi fi-br mr-1"></span> {{__('Portuguese')}}</a>
+                <a class="dropdown-item" href="{{ route('lang', 'en') }}"><span class="fi fi-us mr-1"></span> {{__('crud.english')}}</a>
+                <a class="dropdown-item" href="{{ route('lang', 'de') }}"><span class="fi fi-de mr-1"></span> {{__('crud.german')}}</a>
+                <a class="dropdown-item" href="{{ route('lang', 'pt') }}"><span class="fi fi-br mr-1"></span> {{__('crud.portuguese')}}</a>
             </div>
         </div>
         <div class="user d-inline-block">

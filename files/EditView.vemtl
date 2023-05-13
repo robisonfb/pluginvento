@@ -4,7 +4,7 @@
 <% let modelNameCamelCase = this.model.name.case('camelCase') %>
 <% let crudNameSnakeCase = this.crud.name.case('snakeCase') %>
 <####>
-<x-app-layout :title="{{ __('crud.<$ this.crud.name.case('snakeCase') $>.create_title') }}">
+<x-app-layout :title="__('crud.<$ this.crud.name.case('snakeCase') $>.create_title')">
 
     <div class="container-fluid">
         <div class="row">

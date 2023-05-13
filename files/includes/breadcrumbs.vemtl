@@ -7,12 +7,12 @@
     @foreach ($breadcrumbs as $label => $link)
         @if (is_int($label) && ! is_int($link))
         <li class="breadcrumb-item active" aria-current="page">
-            {{ $link }}
+            {{ __($link) }}
         </li>
         @else
         <li class="breadcrumb-item">
             <a href="{{ $link }}">
-                {{ $label }}
+                {{ __($label) }}
             </a>
         </li>
         @endif
